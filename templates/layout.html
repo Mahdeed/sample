@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Title will always inherit from other file -->
+    <title>  {% block title %}{% endblock %} </title>
+
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS files -->
+    {% include "layout/style.html" %}
+    {% block style %}{% endblock %}
+
+    <!-- Extra CSS files, inherit from other file-->
+    {% block extra_style %}{% endblock %}
+
+</head>
+<body class="animsition">
+
+    <!-- Header -->
+	{% include "layout/head.html" %}
+    {% block head %}{% endblock %}
+
+    <!-- Body code that will always inherit from other file -->
+	{% block body %}{% endblock %}
+
+    <!-- Footer -->
+	{% include "layout/footer.html" %}
+    {% block footer %}{% endblock %}
+
+    <!-- Javascript files -->
+    {% include "layout/scripts.html" %}
+    {% block script %}{% endblock %}
+
+    <!-- Extra Javascript files, inherit from other file-->
+    {% block extra_script %}{% endblock %}
+
+</body>
+</html>
