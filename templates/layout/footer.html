@@ -4,7 +4,20 @@
 <div class="flex-w p-b-90">
 
 <div class="w-size6 p-t-30 p-l-15 p-r-15 respon3">
-
+<h4 class="s-text12 p-b-30">
+GET IN TOUCH
+</h4>
+<div>
+<p class="s-text7 w-size27">
+Any questions? Let us know in store at PUCIT, Katchery Road، Lahore, 54000, Pakistan or call us on <br> Phone: +1 - (478) - 888-8107
+</p>
+</div>
+    <div style="margin-left: 75px" class="w-size2 p-t-25">
+        <!-- Button -->
+        <a href="{{ url_for('contact') }}" class="flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4">
+            Contact Us
+        </a>
+    </div>
 </div>
 
 <div class="w-size7 p-t-30 p-l-15 p-r-15 respon4">
@@ -40,7 +53,22 @@ Links
 </h4>
 <ul>
 <li class="p-b-9">
-<a href="#" class="s-text7">
+<a href="{{ url_for('index') }}" class="s-text7">
+Home
+</a>
+</li>
+<li class="p-b-9">
+<a href="{{ url_for('product') }}" class="s-text7">
+Shop
+</a>
+</li>
+<li class="p-b-9">
+<a href="{{ url_for('cart') }}" class="s-text7">
+Checkout
+</a>
+</li>
+<li class="p-b-9">
+<a href="{{ url_for('about') }}" class="s-text7">
 About Us
 </a>
 </li>
@@ -53,14 +81,50 @@ Help
 <ul>
 <li class="p-b-9">
 <a href="#" class="s-text7">
+FAQs
+</a>
+</li>
+<li class="p-b-9">
+<a href="{{ url_for('contact') }}" class="s-text7">
 Contact Us
+</a>
+</li>
+<li class="p-b-9">
+<a href="#" class="s-text7">
+Privacy Policy
+</a>
+</li>
+<li class="p-b-9">
+<a href="#" class="s-text7">
+Terms Condition
 </a>
 </li>
 </ul>
 </div>
-<div class="w-size8 p-t-30 p-l-15 p-r-15 respon3"></div>
+<div style="margin-top: -60px" class="w-size8 p-t-30 p-l-15 p-r-15 respon3">
+    <div class="block2 wrap-pic-w pos-relative m-b-30">
+						<img src="{{ url_for('static', filename='images/icons/bg-01.jpg') }}" alt="IMG">
+
+						<div class="block2-content sizefull ab-t-l flex-col-c-m">
+							<h4 class="m-text4 t-center w-size3 p-b-8">
+								Sign up
+							</h4>
+
+							<p class="t-center w-size4">
+								Be the frist to know about the latest fashion news and get exclu-sive offers
+							</p>
+
+							<div class="w-size2 p-t-25">
+								<!-- Button -->
+								<a href="#" class="flex-c-m size2 bg4 bo-rad-23 hov1 m-text3 trans-0-4">
+									Sign Up
+								</a>
+							</div>
+						</div>
+					</div>
 </div>
-<div class="t-center p-l-15 p-r-15">
+</div>
+<div style="margin-top: -90px" class="t-center p-l-15 p-r-15">
 <div class="t-center s-text8 p-t-20">
 Copyright © 2017 Colorlib. All rights reserved.
 </div>

@@ -16,7 +16,9 @@ Contact
 <div class="row">
 <div class="col-md-6 p-b-30">
 <div class="p-r-20 p-r-0-lg">
-<div class="contact-map size21" id="google_map" data-map-x="40.614439" data-map-y="-73.926781" data-pin="{{ url_for('static', filename='images/icons/icon-position-map.png') }}" data-scrollwhell="0" data-draggable="1"></div>
+{#<div class="contact-map size21" id="google_map" data-map-x="40.614439" data-map-y="-73.926781" data-pin="{{ url_for('static', filename='images/icons/icon-position-map.png') }}" data-scrollwhell="0" data-draggable="1">#}
+    <iframe style="height: 500px;width: 100%" src="https://maps.google.com/maps?q=Punjab%20University%20College%20of%20Information%20Technology%20Old%20Campus%20Katchery%20Road%D8%8C%20Near%20Anarkali%20Bazar%D8%8C%20Lahore%2C%2054000&amp;t=m&amp;z=15&amp;output=embed&amp;iwloc=near" aria-label="Punjab University College of Information Technology Old Campus Katchery Road، Near Anarkali Bazar، Lahore, 54000"></iframe>
+{#</div>#}
 </div>
 </div>
 <div class="col-md-6 p-b-30">
@@ -54,7 +56,7 @@ Send
     <script>
         document.getElementById("contact").setAttribute("class","sale-noti");
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
+{#    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>#}
 	<script src="{{ url_for('static', filename='js/map-custom.js') }}"></script>
 
 {% endblock %}

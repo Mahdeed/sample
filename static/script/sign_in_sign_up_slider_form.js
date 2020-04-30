@@ -14,6 +14,8 @@ var signinForm = document.getElementById("sign-up-info");
 
 // Open the Sign Up page
 openSignUp = () =>{
+  document.title = "Sign Up";
+  history.pushState({'title': 'Sign Up'}, "Sign Up", "signup");
   // Remove classes so that animations can restart on the next 'switch'
   leftText.classList.remove("overlay-text-left-animation-out");
   overlay.classList.remove("open-sign-in");
@@ -38,6 +40,8 @@ openSignUp = () =>{
 
 // Open the Sign In page
 openSignIn = () =>{
+  document.title = "Sign In";
+  history.pushState({'title': 'Sign In'}, "Sign In", "signin");
   // Remove classes so that animations can restart on the next 'switch'
   leftText.classList.remove("overlay-text-left-animation");
   overlay.classList.remove("open-sign-up");
@@ -61,5 +65,25 @@ openSignIn = () =>{
 }
 
 // When a 'switch' button is pressed, switch page
-openSignUpButton.addEventListener("click", openSignUp, false);
 openSignInButton.addEventListener("click", openSignIn, false);
+openSignUpButton.addEventListener("click", openSignUp, false);
+
+window.onpopstate = e => {
+  const data = e.state;
+  document.title = data.title;
+  if(data.title == "Sign In")
+  {
+      if(document.getElementById("slide-right-button"))
+      {
+        document.getElementById("slide-right-button").click();
+      }
+  }
+  else
+  {
+      if(document.getElementById("slide-left-button"))
+      {
+        document.getElementById("slide-left-button").click();
+      }
+  }
+};
+

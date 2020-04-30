@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}
+    Forget Password
+{% endblock %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/sign_in_sign_up_slider_form.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container" style="margin-bottom: 50px;margin-top: 5px">
+  <div class="overlay" id="overlay">
+    <div class="sign-in" id="sign-in">
+      <h1>Forgot Password?</h1>
+      <p>You can reset your password here.</p>
+    </div>
+  </div>
+
+  <div class="form">
+    <div class="sign-up" id="sign-up-info">
+      <h1 style="font-size: xx-large">Password Reset</h1>
+      <form style="margin-top: 30px" id="sign-up-form" method="post" action="#">
+        <input type="email" placeholder="Email" required/>
+        <button class="control-button up">Reset</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='script/jquery-1.11.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script/sign_in_sign_up_slider_form.js') }}"></script>
+    {% if signin %}
+        <script>
+        window.addEventListener("load", document.getElementById("slide-right-button").click());
+        </script>
+    {% endif %}
+{% endblock %}

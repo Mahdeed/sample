@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}
+    Reset Password
+{% endblock %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/sign_in_sign_up_slider_form.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container" style="margin-bottom: 50px;margin-top: 5px">
+  <div class="overlay" id="overlay">
+    <div class="sign-in" id="sign-in">
+      <h1>Change Password</h1>
+      <p>Use the form to change your password.</p>
+    </div>
+  </div>
+
+  <div class="form">
+    <div class="sign-up" id="sign-up-info">
+      <h1 style="font-size: xx-large">Reset Password</h1>
+      <form style="margin-top: 30px" id="sign-up-form" method="post" action="#">
+        <input disabled="disabled" type="email" placeholder="{{email}}" required/>
+        <input type="password" placeholder="New Password"/>
+        <button class="control-button up">Reset</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='script/jquery-1.11.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script/bootstrap.min.js') }}"></script>
+{% endblock %}

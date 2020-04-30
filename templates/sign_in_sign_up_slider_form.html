@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}
-    Sign In / Sign Up
+    {{ title }}
 {% endblock %}
 
 {% block extra_style %}
@@ -10,7 +10,7 @@
 
 {% block body %}
 
-<div class="container" style="margin-bottom: 50px">
+<div class="container" style="margin-bottom: 50px;margin-top: 5px">
   <div class="overlay" id="overlay">
     <div class="sign-in" id="sign-in">
       <h1>Welcome Back!</h1>
@@ -18,7 +18,7 @@
       <button class="switch-button" id="slide-right-button">Sign In</button>
     </div>
     <div class="sign-up" id="sign-up">
-      <h1>Hello, Friend!</h1>
+      <h1 style="font-size: xx-large" >New to Our Shop?</h1>
       <p>Enter your personal details and start a journey with us</p>
       <button class="switch-button" id="slide-left-button">Sign Up</button>
     </div>
@@ -27,19 +27,35 @@
   <div class="form">
     <div class="sign-in" id="sign-in-info">
       <h1>Sign In</h1>
-      <form id="sign-in-form" method="get" action="/login">
+      <form id="sign-in-form" method="get" action="#">
         <input type="email" placeholder="Email"/>
         <input type="password" placeholder="Password"/>
-        <p class="forgot-password">Forgot your password?</p>
+        <p class="forgot-password"><a href="{{ url_for('forget_password') }}">Forgot your password?</a></p>
         <button class="control-button in">Sign In</button>
       </form>
     </div>
     <div class="sign-up" id="sign-up-info">
       <h1>Create Account</h1>
-      <form id="sign-up-form" method="post" action="/signup">
-        <input type="text" placeholder="Name"/>
-        <input type="email" placeholder="Email"/>
-        <input type="password" placeholder="Password"/>
+      <form id="sign-up-form" method="post" action="#">
+        <input style="margin-bottom: -5px" type="text" placeholder="Name" required/>
+        <input style="margin-bottom: -5px" type="email" placeholder="Email" required/>
+        <input style="margin-bottom: -2px" type="password" placeholder="Password" required/>
+        <div style="margin-left: 27px;margin-bottom: -5px;max-width: 260px" class="rs2-select2 rs3-select2 rs4-select2 bo4 of-hidden w-size21 m-t-8 m-b-12">
+         <select class="selection-2" name="securityQuestion" id="securityQuestion" required>
+            <option disabled="disabled" selected="selected" value="">Select Security Question</option>
+            <option value="Sibling's middle name?">Sibling's middle name?</option>
+            <option value="Phone number?">Phone number?</option>
+            <option value="Childhood nickname?">Childhood nickname?</option>
+         </select>
+        </div>
+        <input style="margin-bottom: -2px" type="text" placeholder="Answer" name="answer" id="answer" maxlength="42" required>
+        <div style="margin-left: 27px;margin-bottom: -5px;max-width: 260px" class="rs2-select2 rs3-select2 rs4-select2 bo4 of-hidden w-size21 m-t-8 m-b-12">
+         <select class="selection-2" required>
+            <option disabled="disabled" selected="selected" value="">Create Account As</option>
+            <option value="Buyer">Buyer</option>
+            <option value="Celler">Celler</option>
+         </select>
+        </div>
         <button class="control-button up">Sign Up</button>
       </form>
     </div>
@@ -52,4 +68,9 @@
     <script type="text/javascript" src="{{ url_for('static', filename='script/jquery-1.11.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='script/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='script/sign_in_sign_up_slider_form.js') }}"></script>
+    {% if signin %}
+        <script>
+        window.addEventListener("load", document.getElementById("slide-right-button").click());
+        </script>
+    {% endif %}
 {% endblock %}

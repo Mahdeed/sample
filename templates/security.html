@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}
+    Security Question
+{% endblock %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/sign_in_sign_up_slider_form.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container" style="margin-bottom: 50px;margin-top: 5px">
+  <div class="overlay" id="overlay">
+    <div class="sign-in" id="sign-in">
+      <h1>Need to Reset Password?</h1>
+      <p>Give answer correctly!</p>
+    </div>
+  </div>
+
+  <div class="form">
+    <div class="sign-up" id="sign-up-info">
+      <h1 style="font-size: xx-large">Security Question</h1>
+      <form style="margin-top: 30px" id="sign-up-form" method="post" action="#">
+        <div style="margin-left: 13px;max-width: 260px" class="rs2-select2 rs3-select2 rs4-select2 bo4 of-hidden w-size21 m-t-8 m-b-12">
+         <select class="selection-2" name="securityQuestion" id="securityQuestion" required>
+            <option disabled="disabled" selected="selected" value="">Select Security Question</option>
+            <option value="Sibling's middle name?">Sibling's middle name?</option>
+            <option value="Phone number?">Phone number?</option>
+            <option value="Childhood nickname?">Childhood nickname?</option>
+         </select>
+        </div>
+        <input style="margin-bottom: -2px" type="text" placeholder="Answer" name="answer" id="answer" maxlength="42" required>
+        <button class="control-button up">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='script/jquery-1.11.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script/bootstrap.min.js') }}"></script>
+{% endblock %}

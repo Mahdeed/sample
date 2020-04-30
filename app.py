@@ -8,15 +8,11 @@ def index():
 
 @app.route('/signin')
 def signin():
-    return render_template("sign_in_sign_up_slider_form.html")
+    return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In")
 
-@app.route('/login', methods=["GET","POST"])
-def login():
-    return "Login Successfully!"
-
-@app.route('/signup', methods=["GET","POST"])
+@app.route('/signup')
 def signup():
-    return "SignUp Successfully!"
+    return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up")
 
 @app.route('/about')
 def about():
@@ -37,6 +33,17 @@ def contact():
 def product():
     return render_template("product.html")
 
+@app.route('/forget_password')
+def forget_password():
+    return render_template("forget.html")
+
+@app.route('/security_question')
+def security_question():
+    return render_template("security.html")
+
+@app.route('/reset_password')
+def reset_password():
+    return render_template("reset.html", email="bcsf17a@pucit.edu.pk")
 
 @app.route('/<int:id>')
 def product_detail(id):
