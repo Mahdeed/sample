@@ -23,6 +23,17 @@ def about():
 def cart():
     return render_template("cart.html")
 
+@app.route('/profile')
+def profile():
+    return render_template("profile.html", user="seller", username="Ecommerce", email="bcsf17@gmail.com", address="Lahore", phone="0900780601")
+
+@app.route('/edit_product')
+def edit_product():
+    return render_template("add_edit_product.html", title="Edit", product_name="Shirt", type="Mens", price= "123", warranty="2 years", charges="123")
+
+@app.route('/add_product')
+def add_product():
+    return render_template("add_edit_product.html", title="Add Product", product_name="Product Name", type="Type", price= "123", warranty="Years", charges="123")
 
 @app.route('/contact')
 def contact():
@@ -48,7 +59,6 @@ def reset_password():
 @app.route('/<int:id>')
 def product_detail(id):
     return render_template("product-detail.html")
-
 
 if __name__ == '__main__':
     app.run()
