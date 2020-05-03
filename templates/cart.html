@@ -31,19 +31,19 @@ Cart
 </div>
 </td>
 <td class="column-2">Men Tshirt</td>
-<td class="column-3">$36.00</td>
+<td id="item-price-1" class="column-3">$36.00</td>
 <td class="column-4">
 <div class="flex-w bo5 of-hidden w-size17">
-<button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
+<button onclick="changeItemTotal(1,0);" class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
 <i class="fs-12 fa fa-minus" aria-hidden="true"></i>
 </button>
-<input class="size8 m-text18 t-center num-product" type="number" name="num-product1" value="1">
-<button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
+<input id="item-1" class="size8 m-text18 t-center num-product" type="number" name="num-product1" value="1">
+<button onclick="changeItemTotal(1,1);" class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
 <i class="fs-12 fa fa-plus" aria-hidden="true"></i>
 </button>
 </div>
 </td>
-<td class="column-5">$36.00</td>
+<td  id="total-item-1" class="column-5 total">$36.00</td>
 </tr>
 <tr class="table-row">
 <td class="column-1">
@@ -52,19 +52,19 @@ Cart
 </div>
 </td>
 <td class="column-2">Mug Adventure</td>
-<td class="column-3">$16.00</td>
+<td id="item-price-2" class="column-3">$16.00</td>
 <td class="column-4">
 <div class="flex-w bo5 of-hidden w-size17">
-<button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
+<button onclick="changeItemTotal(2,0);" class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
 <i class="fs-12 fa fa-minus" aria-hidden="true"></i>
 </button>
-<input class="size8 m-text18 t-center num-product" type="number" name="num-product2" value="1">
-<button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
+<input id="item-2" class="size8 m-text18 t-center num-product" type="number" name="num-product2" value="1">
+<button onclick="changeItemTotal(2,1);" class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
 <i class="fs-12 fa fa-plus" aria-hidden="true"></i>
 </button>
 </div>
 </td>
-<td class="column-5">$16.00</td>
+<td id="total-item-2" class="column-5 total">$16.00</td>
 </tr>
 </table>
 </div>
@@ -98,7 +98,7 @@ Cart Totals
 <span class="s-text18 w-size19 w-full-sm">
 Subtotal:
 </span>
-<span class="m-text21 w-size20 w-full-sm">
+<span id="subtotal" class="m-text21 w-size20 w-full-sm">
 $39.00
 </span>
 </div>
@@ -141,7 +141,7 @@ Update Totals
 <span class="m-text22 w-size19 w-full-sm">
 Total:
 </span>
-<span class="m-text21 w-size20 w-full-sm">
+<span id="grandtotal" class="m-text21 w-size20 w-full-sm">
 $39.00
 </span>
 </div>
@@ -160,5 +160,31 @@ Proceed to Checkout
 {% block extra_script %}
     <script>
         document.getElementById("cart").setAttribute("class","sale-noti");
+    </script>
+    <script>
+        function changeItemTotal(no, indication) {
+            let quantity = parseInt(document.getElementById("item-"+String(no)).value);
+            let price = parseInt(((document.getElementById("item-price-"+String(no)).innerText).split("$"))[1]);
+            if(indication == 0)
+            {
+                if(quantity != 1) {
+                    document.getElementById("total-item-"+String(no)).innerText= "$"+String((quantity-1)*price)+".00";
+                }
+            }
+            else
+            {
+                document.getElementById("total-item-"+String(no)).innerText= "$"+String((quantity+1)*price)+".00";
+            }
+            let entities= document.querySelectorAll(".total");
+            let total = 0;
+            for(let i=1;i<=entities.length;i++)
+            {
+                total += parseInt(((document.getElementById("total-item-"+String(i)).innerText).split("$"))[1]);
+                //console.log(document.getElementById("total-item-"+String(i)).innerText);
+            }
+            //console.log(total);
+            document.getElementById("subtotal").innerText= "$"+String(total)+".00";
+            document.getElementById("grandtotal").innerText= "$"+String(total)+".00";
+        }
     </script>
 {% endblock %}
