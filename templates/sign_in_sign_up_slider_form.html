@@ -6,6 +6,7 @@
 {% block extra_style %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/sign_in_sign_up_slider_form.css') }}">
+   {% if msg %}
     <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 
@@ -48,6 +49,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   cursor: pointer;
 }
 </style>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -68,14 +70,17 @@ body {font-family: Arial, Helvetica, sans-serif;}
   </div>
 
   <div class="form">
+
+    <div class="sign-in" id="sign-in-info">
+        {% if msg %}
       <div id="myModal" class="modal" style="display: block;">
   <!-- Modal content -->
   <div class="modal-content" style="margin-top: 130px;width: 515px;margin-left: 225px;">
-    <p style="color: whitesmoke;margin-top: 20px;margin-left: 10px">Some text in the Modal..</p>
-    <span class="close">&times;</span>
+      <span style="color: whitesmoke;text-align: right" class="close">&times;</span>
+    <p style="color: whitesmoke;margin-top: 10px;text-align: center">{{msg}}</p>
   </div>
 </div>
-    <div class="sign-in" id="sign-in-info">
+      {% endif %}
       <h1>Sign In</h1>
       <form id="sign-in-form" method="get" action="/signin">
         <input type="email" placeholder="Email"/>
@@ -85,6 +90,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
       </form>
     </div>
     <div class="sign-up" id="sign-up-info">
+        {% if msg %}
+      <div id="myModal" class="modal" style="display: block;">
+  <!-- Modal content -->
+  <div class="modal-content" style="margin-top: 130px;width: 515px;margin-left: 612px;">
+      <span style="color: whitesmoke;text-align: right" class="close">&times;</span>
+    <p style="color: whitesmoke;margin-top: 10px;text-align: center">{{msg}}</p>
+  </div>
+</div>
+      {% endif %}
       <h1>Create Account</h1>
       <form id="sign-up-form" method="post" action="/signup">
         <input style="margin-bottom: -5px" type="text" placeholder="Name" required/>
@@ -114,6 +128,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 {% endblock %}
 
 {% block extra_script %}
+    {% if msg %}
     <script>
 // Get the modal
 var modal = document.getElementById("myModal");
@@ -133,6 +148,7 @@ window.onclick = function(event) {
   }
 }
 </script>
+    {% endif %}
     <script type="text/javascript" src="{{ url_for('static', filename='script/jquery-1.11.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='script/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='script/sign_in_sign_up_slider_form.js') }}"></script>

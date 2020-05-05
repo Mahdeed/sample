@@ -10,20 +10,20 @@ def index():
 
 @app.route('/signin',  methods=['GET', 'POST'])
 def signin():
+    print("Signin")
     errorMsg = ' '
     email = request.form['email']
     password = request.form['password']
     if True:
       #function to chck valid email and password:
-            session['email'] = email
-            user = {}
-            #user will have data extracted from db for the buyer or the seller
-            return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
-                       address=user["address"], phone=user["phone"])
-
+        session['email'] = email
+        user = {}
+        #user will have data extracted from db for the buyer or the seller
+        return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
+                   address=user["address"], phone=user["phone"])
     else:
         errorMsg = 'invalid email/password'
-        return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign In", msg=errorMsg)
+        return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg)
 
 @app.route('/logout')
 def logout():
