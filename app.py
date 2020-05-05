@@ -1,9 +1,11 @@
+import DBHandler as db
 from flask import Flask, render_template, request, session
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
+    db.connect()
     return render_template("index.html")
 
 @app.route('/signin',  methods=['GET', 'POST'])
