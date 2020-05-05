@@ -1,14 +1,7 @@
-import pymysql as sql
+import pymysql
 
 DATABASEIP = "localhost"
 DB_USER = "root"
 DB_PASSWORD = ""
-DATABASE = "e_commerce"
+DATABASE = ""
 
-def connect():
-    try:
-        db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
-        cursor = db.cursor()
-        print("DATABASE IS CONNECTED")
-    except Exception as e :
-        print(e._traceback_)

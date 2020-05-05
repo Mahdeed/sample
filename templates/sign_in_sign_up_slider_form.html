@@ -27,7 +27,7 @@
   <div class="form">
     <div class="sign-in" id="sign-in-info">
       <h1>Sign In</h1>
-      <form id="sign-in-form" method="get" action="#">
+      <form id="sign-in-form" method="get" action="/signin">
         <input type="email" placeholder="Email"/>
         <input type="password" placeholder="Password"/>
         <p class="forgot-password"><a href="{{ url_for('forget_password') }}">Forgot your password?</a></p>
@@ -36,7 +36,7 @@
     </div>
     <div class="sign-up" id="sign-up-info">
       <h1>Create Account</h1>
-      <form id="sign-up-form" method="post" action="#">
+      <form id="sign-up-form" method="post" action="/signup">
         <input style="margin-bottom: -5px" type="text" placeholder="Name" required/>
         <input style="margin-bottom: -5px" type="email" placeholder="Email" required/>
         <input style="margin-bottom: -2px" type="password" placeholder="Password" required/>
@@ -44,13 +44,12 @@
          <select class="selection-2" name="securityQuestion" id="securityQuestion" required>
             <option disabled="disabled" selected="selected" value="">Select Security Question</option>
             <option value="Sibling's middle name?">Sibling's middle name?</option>
-            <option value="Phone number?">Phone number?</option>
             <option value="Childhood nickname?">Childhood nickname?</option>
          </select>
         </div>
         <input style="margin-bottom: -2px" type="text" placeholder="Answer" name="answer" id="answer" maxlength="42" required>
         <div style="margin-left: 27px;margin-bottom: -5px;max-width: 260px" class="rs2-select2 rs3-select2 rs4-select2 bo4 of-hidden w-size21 m-t-8 m-b-12">
-         <select class="selection-2" required>
+         <select class="selection-2" name="account" required>
             <option disabled="disabled" selected="selected" value="">Create Account As</option>
             <option value="Buyer">Buyer</option>
             <option value="Celler">Celler</option>

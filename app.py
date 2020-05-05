@@ -1,20 +1,58 @@
-import DBHandler as db
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    db.connect()
     return render_template("index.html")
 
-@app.route('/signin')
+@app.route('/signin',  methods=['GET', 'POST'])
 def signin():
-    return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In")
+    errorMsg = ' '
+    email = request.form['email']
+    password = request.form['password']
+    if True:
+      #function to chck valid email and password:
+            session['email'] = email
+            user = {}
+            #user will have data extracted from db for the buyer or the seller
+            return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
+                       address=user["address"], phone=user["phone"])
 
-@app.route('/signup')
+    else:
+        errorMsg = 'invalid email/password'
+        return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign In", msg=errorMsg)
+
+@app.route('/logout')
+def logout():
+   session.pop('email', None)
+   return render_template('index.html')
+
+@app.route('/signup', methods=['POST'])
 def signup():
-    return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up")
+    msg = ' '
+    name = request.form("Name")
+    email = request.form("Email")
+    password = request.form("Password")
+    securityQuestion = request.form("securityQuestion")
+    answer = request.form("answer")
+    account = request.form("account")
+    user = {
+        "name": name,
+        "email": email,
+        "password": password,
+        "securityQuestion": securityQuestion,
+        "answer": answer,
+        "account": account,
+    }
+    if True:
+    #check if the account pahle se exists:
+          msg = 'email already exists'
+          return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+    else:
+          #insert in db
+          return render_template("index.html")
+
 
 @app.route('/about')
 def about():
@@ -27,7 +65,7 @@ def cart():
 
 @app.route('/profile')
 def profile():
-    return render_template("profile.html", user="seller", username="Ecommerce", email="bcsf17@gmail.com", address="Lahore", phone="0900780601")
+    return render_template("profile.html", user="seller", username="abc", email="bcsf17@gmail.com", address="address", phone="090078601")
 
 @app.route('/edit_product')
 def edit_product():
