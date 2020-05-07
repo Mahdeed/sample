@@ -5,7 +5,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    db.connect()
+    data = db.get_user_data()
+    print(data)
     return render_template("index.html")
 
 @app.route('/signin',  methods=['GET', 'POST'])
@@ -13,16 +14,23 @@ def signin():
     errorMsg = ' '
     email = request.form['email']
     password = request.form['password']
-    if True:
-      #function to chck valid email and password:
+    # function to chck valid email and password:
+    if db.isEmailExists_in_buyer(email):
+        if db.isPasswordCorrect_in_buyer(email, password):
+            account, data = db.get_buyer_data(email)
+    else:
+        if db.isPasswordCorrect_in_seller(email, password):
+            account, data = db.get_seller_data(email)
+
+    if data is not None:
             session['email'] = email
-            user = {}
+            print("Printing user data in app.py and the function signin : " + data)
+            user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
             #user will have data extracted from db for the buyer or the seller
             return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
                        address=user["address"], phone=user["phone"])
-
     else:
-        errorMsg = 'invalid email/password'
+        errorMsg = 'Invalid email/password!!'
         return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign In", msg=errorMsg)
 
 @app.route('/logout')
