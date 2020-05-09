@@ -10,72 +10,76 @@ def index():
     # print(data)
     return render_template("index.html", products=[{'id': "03", 'name': "Jeans", 'price': "200"}])
 
-@app.route('/signin', methods=['GET', 'POST'])
-def signin_form():
-    print("Signin")
-    errorMsg = ' '
-    email = request.form['email']
-    password = request.form['password']
-    # function to chck valid email and password:
-    if db.isEmailExists_in_buyer(email):
-        if db.isPasswordCorrect_in_buyer(email, password):
-            account, data = db.get_buyer_data(email)
-    else:
-        if db.isPasswordCorrect_in_seller(email, password):
-            account, data = db.get_seller_data(email)
-
-    if data is not None:
-        session['email'] = email
-        print("Printing user data in app.py and the function signin : " + data)
-        user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
-
-        #user will have data extracted from db for the buyer or the seller
-        return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
-                   address=user["address"], phone=user["phone"])
-    else:
-        errorMsg = 'Invalid email/password!!'
-        return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg)
 
 @app.route('/logout')
 def logout():
    session.pop('email', None)
    return render_template('index.html')
 
-@app.route('/signup', methods=["POST"])
-def signup_form():
-    msg = ' '
-    name = request.form.get("name")
-    email = request.form.get("email")
-    password = request.form.get("password")
-    securityQuestion = request.form.get("securityQuestion")
-    answer = request.form.get("answer")
-    account = request.form.get("account")
-    print(account)
-    if account == "Buyer":
-        if db.isEmailExists_in_buyer(email):
-            msg = 'Email already exists!!'
-            print("data not inserted!!")
-            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
-        else:
-            print("data inserted!!")
-            db.insert_into_Buyer(name, password, email, '', '', securityQuestion, answer)
-            return render_template("index.html")
-    else:
-        if db.isEmailExists_in_seller(email):
-            msg = 'Email already exists in seller!'
-            print('DATA NOT INSERTED IN SELLER!')
-            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
-        else:
-            print("Data inserted into Seller!")
-            db.insert_into_seller(name, '', email, '', password, '', securityQuestion, answer)
 
-@app.route('/login')
+
+@app.route('/login', methods=["GET", "POST"])
 def signin():
-    return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Login", msg=None)
+    if request.method == "GET":
+        return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Login", msg=None)
+    else:
+        print("Signin")
+        errorMsg = ' '
+        email = request.form.get("email")
+        password = request.form.get("password")
+        # function to chck valid email and password:
+        if db.isEmailExists_in_buyer(email):
+            if db.isPasswordCorrect_in_buyer(email, password):
+                account, data = db.get_buyer_data(email)
+        else:
+            if db.isPasswordCorrect_in_seller(email, password):
+                account, data = db.get_seller_data(email)
 
-@app.route('/register')
+        if data is not None:
+            session['email'] = email
+            print("Printing user data in app.py and the function signin : " + data)
+            user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
+            # user will have data extracted from db for the buyer or the seller
+            return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
+                                   address=user["address"], phone=user["phone"])
+        else:
+            errorMsg = 'Invalid email/password!!'
+            return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg)
+
+@app.route('/register', methods=["GET", "POST"])
 def signup():
-    return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Register", msg=None)
+    if request.method == "GET":
+        return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Register", msg=None)
+    else:
+        name = request.form.get("name")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        securityQuestion = request.form.get("securityQuestion")
+        answer = request.form.get("answer")
+        account = request.form.get("account")
+        print(name)
+        print(email)
+        print(password)
+        print(securityQuestion)
+        print(answer)
+        print(account)
+        if account == "Buyer":
+            if db.isEmailExists_in_buyer(email):
+                msg = 'Email already exists!!'
+                print("data not inserted in buyer!")
+                return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+            else:
+                print("data inserted!!")
+                db.insert_into_Buyer(name, password, email, ' ', ' ', securityQuestion, answer)
+                return render_template("index.html")
+        else:
+            if db.isEmailExists_in_seller(email):
+                msg = 'Email already exists in seller!'
+                print('DATA NOT INSERTED IN SELLER!')
+                return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+            else:
+                db.insert_into_seller(name, '', email, '', password, '', securityQuestion, answer)
+                print("Data inserted into Seller!")
 
 @app.route('/about')
 def about():

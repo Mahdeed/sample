@@ -82,9 +82,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </div>
       {% endif %}
       <h1>Login</h1>
-      <form id="sign-in-form" method="get" action="{{ url_for('signin_form') }}">
-        <input type="email" placeholder="Email"/>
-        <input type="password" placeholder="Password"/>
+      <form id="sign-in-form" method="get" action="{{ url_for('signin') }}">
+        <input type="email"  name="email" placeholder="Email"/>
+        <input type="password" name="password" placeholder="Password"/>
         <p class="forgot-password"><a href="{{ url_for('forget_password') }}">Forgot your password?</a></p>
         <button class="control-button in">Login</button>
       </form>
@@ -100,7 +100,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </div>
       {% endif %}
       <h1>Create Account</h1>
-      <form id="sign-up-form" method="post" action="{{ url_for('signup_form') }}">
+      <form id="sign-up-form" method="post" action="{{ url_for('signup') }}">
         <input style="margin-bottom: -5px" name="name" type="text" placeholder="Name" required/>
         <input style="margin-bottom: -5px" type="email" name="email" placeholder="Email" required/>
         <input style="margin-bottom: -2px" type="password" name="password" placeholder="Password" required/>

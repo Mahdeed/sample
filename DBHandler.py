@@ -20,19 +20,20 @@ def connect():
 
 #Function to insert info into 'buyer' table #
 def insert_into_Buyer(name, password, email, phoneNumber, address, securityQuestion, answer):
+    print("insert_into_Buyer")
     try:
         if isEmailExists_in_seller(email):
             return None
         else:
             db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
             cursor = db.cursor()
-            print("DATABASE IS CONNECTED")
+            print("DATABASE IS CONNECTED in insert_into_Buyer")
             query = "INSERT INTO buyer(name, password, email, phoneNumber, address, securityQuestion, answer)VALUES(%s, %s, %s, %s, %s, %s, %s)"
             args = (name, password, email, phoneNumber, address, securityQuestion, answer)
             cursor.execute(query, args)
             print("Record inserted into the table 'buyer' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print(str(e))
     finally:
         db.commit()
         db.close()
@@ -136,6 +137,7 @@ def insert_into_seller(name, address, email, phoneNumber, password, ranking, sec
 
 #Function to get data from the table 'buyer'
 def get_buyer_data(email):
+    print('get_buyer_data()')
     try:
         db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
         cur = db.cursor()
@@ -214,17 +216,20 @@ def isEmailExists_in_buyer(email):
 
 # Function to check if email exists in seller
 def isEmailExists_in_seller(email):
+    print("isEmailExists_in_seller")
     try:
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
-        print("DATABASE IS CONNECTED")
+        print("DATABASE IS CONNECTED in isEmailExists_in_seller")
         cursor = db.cursor()
         query = "SELECT email FROM seller where email = %s"
         arg = (email)
         cursor.execute(query, arg)
+        print("isEmailExists_in_seller execute query")
         emails = cursor.fetchone()
-        print(len(emails))
-        print(emails[0])
-        if email == emails[0]:
+        print(emails)
+        #print(emails[0])
+        if emails:
+            #email == emails[0]:
             return True
         else:
             return False
@@ -232,7 +237,6 @@ def isEmailExists_in_seller(email):
         print("ERROR DB is not connected")
     finally:
         if db!=None:
-            db.commit()
             db.close()
 
 
@@ -296,3 +300,4 @@ def isPasswordCorrect_in_seller(email, password):
 
 ## FUNCTIONS TO CHECKS EMAILS AND STUFF EENNNDDDD Heeerrreeee #######
 #################################################################################################################################
+
