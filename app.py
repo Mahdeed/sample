@@ -6,23 +6,34 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     db.connect()
-    return render_template("index.html")
+    # data = db.get_buyer_data("b@gmail.com")
+    # print(data)
+    return render_template("index.html", products=[{'id': "03", 'name': "Jeans", 'price': "200"}])
 
-@app.route('/signin',  methods=['GET', 'POST'])
-def signin():
+@app.route('/signin', methods=['GET', 'POST'])
+def signin_form():
     print("Signin")
     errorMsg = ' '
     email = request.form['email']
     password = request.form['password']
-    if True:
-      #function to chck valid email and password:
+    # function to chck valid email and password:
+    if db.isEmailExists_in_buyer(email):
+        if db.isPasswordCorrect_in_buyer(email, password):
+            account, data = db.get_buyer_data(email)
+    else:
+        if db.isPasswordCorrect_in_seller(email, password):
+            account, data = db.get_seller_data(email)
+
+    if data is not None:
         session['email'] = email
-        user = {}
+        print("Printing user data in app.py and the function signin : " + data)
+        user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
+
         #user will have data extracted from db for the buyer or the seller
         return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
                    address=user["address"], phone=user["phone"])
     else:
-        errorMsg = 'invalid email/password'
+        errorMsg = 'Invalid email/password!!'
         return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg)
 
 @app.route('/logout')
@@ -30,31 +41,41 @@ def logout():
    session.pop('email', None)
    return render_template('index.html')
 
-@app.route('/signup', methods=['POST'])
-def signup():
+@app.route('/signup', methods=["POST"])
+def signup_form():
     msg = ' '
-    name = request.form("Name")
-    email = request.form("Email")
-    password = request.form("Password")
-    securityQuestion = request.form("securityQuestion")
-    answer = request.form("answer")
-    account = request.form("account")
-    user = {
-        "name": name,
-        "email": email,
-        "password": password,
-        "securityQuestion": securityQuestion,
-        "answer": answer,
-        "account": account,
-    }
-    if True:
-    #check if the account pahle se exists:
-          msg = 'email already exists'
-          return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+    name = request.form.get("name")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    securityQuestion = request.form.get("securityQuestion")
+    answer = request.form.get("answer")
+    account = request.form.get("account")
+    print(account)
+    if account == "Buyer":
+        if db.isEmailExists_in_buyer(email):
+            msg = 'Email already exists!!'
+            print("data not inserted!!")
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+        else:
+            print("data inserted!!")
+            db.insert_into_Buyer(name, password, email, '', '', securityQuestion, answer)
+            return render_template("index.html")
     else:
-          #insert in db
-          return render_template("index.html")
+        if db.isEmailExists_in_seller(email):
+            msg = 'Email already exists in seller!'
+            print('DATA NOT INSERTED IN SELLER!')
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+        else:
+            print("Data inserted into Seller!")
+            db.insert_into_seller(name, '', email, '', password, '', securityQuestion, answer)
 
+@app.route('/login')
+def signin():
+    return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Login", msg=None)
+
+@app.route('/register')
+def signup():
+    return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Register", msg=None)
 
 @app.route('/about')
 def about():
@@ -86,6 +107,18 @@ def contact():
 def product():
     return render_template("product.html")
 
+@app.route('/forget')
+def forget_password_form():
+    return render_template("forget.html")
+
+@app.route('/question')
+def security_question_form():
+    return render_template("security.html")
+
+@app.route('/reset')
+def reset_password_form():
+    return render_template("reset.html", email="bcsf17a@pucit.edu.pk")
+
 @app.route('/forget_password')
 def forget_password():
     return render_template("forget.html")
@@ -98,7 +131,7 @@ def security_question():
 def reset_password():
     return render_template("reset.html", email="bcsf17a@pucit.edu.pk")
 
-@app.route('/<int:id>')
+@app.route('/product/<int:id>')
 def product_detail(id):
     return render_template("product-detail.html")
 

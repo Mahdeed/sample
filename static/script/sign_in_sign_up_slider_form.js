@@ -14,8 +14,8 @@ var signinForm = document.getElementById("sign-up-info");
 
 // Open the Sign Up page
 openSignUp = () =>{
-  document.title = "Sign Up";
-  history.pushState({'title': 'Sign Up'}, "Sign Up", "signup");
+  document.title = "Register";
+  history.pushState({'title': 'Register'}, "Register", "register");
   // Remove classes so that animations can restart on the next 'switch'
   leftText.classList.remove("overlay-text-left-animation-out");
   overlay.classList.remove("open-sign-in");
@@ -40,8 +40,8 @@ openSignUp = () =>{
 
 // Open the Sign In page
 openSignIn = () =>{
-  document.title = "Sign In";
-  history.pushState({'title': 'Sign In'}, "Sign In", "signin");
+  document.title = "Login";
+  history.pushState({'title': 'Login'}, "Login", "login");
   // Remove classes so that animations can restart on the next 'switch'
   leftText.classList.remove("overlay-text-left-animation");
   overlay.classList.remove("open-sign-up");
@@ -71,7 +71,7 @@ openSignUpButton.addEventListener("click", openSignUp, false);
 window.onpopstate = e => {
   const data = e.state;
   document.title = data.title;
-  if(data.title == "Sign In")
+  if(data.title == "Login")
   {
       if(document.getElementById("slide-right-button"))
       {

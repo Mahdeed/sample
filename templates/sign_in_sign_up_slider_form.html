@@ -60,12 +60,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
     <div class="sign-in" id="sign-in">
       <h1>Welcome Back!</h1>
       <p>To keep connected with us please login with your personal info</p>
-      <button class="switch-button" id="slide-right-button">Sign In</button>
+      <button class="switch-button" id="slide-right-button">Login</button>
     </div>
     <div class="sign-up" id="sign-up">
       <h1 style="font-size: xx-large" >New to Our Shop?</h1>
       <p>Enter your personal details and start a journey with us</p>
-      <button class="switch-button" id="slide-left-button">Sign Up</button>
+      <button class="switch-button" id="slide-left-button">Register</button>
     </div>
   </div>
 
@@ -81,12 +81,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
   </div>
 </div>
       {% endif %}
-      <h1>Sign In</h1>
-      <form id="sign-in-form" method="get" action="/signin">
+      <h1>Login</h1>
+      <form id="sign-in-form" method="get" action="{{ url_for('signin_form') }}">
         <input type="email" placeholder="Email"/>
         <input type="password" placeholder="Password"/>
         <p class="forgot-password"><a href="{{ url_for('forget_password') }}">Forgot your password?</a></p>
-        <button class="control-button in">Sign In</button>
+        <button class="control-button in">Login</button>
       </form>
     </div>
     <div class="sign-up" id="sign-up-info">
@@ -100,7 +100,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </div>
       {% endif %}
       <h1>Create Account</h1>
-      <form id="sign-up-form" method="post" action="/signup">
+      <form id="sign-up-form" method="post" action="{{ url_for('signup_form') }}">
         <input style="margin-bottom: -5px" name="name" type="text" placeholder="Name" required/>
         <input style="margin-bottom: -5px" type="email" name="email" placeholder="Email" required/>
         <input style="margin-bottom: -2px" type="password" name="password" placeholder="Password" required/>
@@ -119,7 +119,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
             <option value="Seller">Seller</option>
          </select>
         </div>
-        <button class="control-button up">Sign Up</button>
+        <button class="control-button up">Register</button>
       </form>
     </div>
   </div>
