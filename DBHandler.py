@@ -146,7 +146,6 @@ def get_buyer_data(email):
         data = cur.fetchone()
         if (len)(data) < 1:
             data = None
-        print(data)
         print("Record obtained from the table 'buyer' ")
     except Exception as e:
         print("Error DB could not be connected")

@@ -5,8 +5,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    data = db.get_user_data()
-    print(data)
+    # data = db.get_buyer_data("b@gmail.com")
+    # print(data)
     return render_template("index.html")
 
 @app.route('/signin',  methods=['GET', 'POST'])
@@ -38,30 +38,33 @@ def logout():
    session.pop('email', None)
    return render_template('index.html')
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=["GET","POST"])
 def signup():
     msg = ' '
-    name = request.form("Name")
-    email = request.form("Email")
-    password = request.form("Password")
-    securityQuestion = request.form("securityQuestion")
-    answer = request.form("answer")
-    account = request.form("account")
-    user = {
-        "name": name,
-        "email": email,
-        "password": password,
-        "securityQuestion": securityQuestion,
-        "answer": answer,
-        "account": account,
-    }
-    if True:
-    #check if the account pahle se exists:
-          msg = 'email already exists'
-          return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+    name = request.form.get("name")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    securityQuestion = request.form.get("securityQuestion")
+    answer = request.form.get("answer")
+    account = request.form.get("account")
+    print(account)
+    if account == "Buyer":
+        if db.isEmailExists_in_buyer(email):
+            msg = 'Email already exists!!'
+            print("data not inserted!!")
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+        else:
+            print("data inserted!!")
+            db.insert_into_Buyer(name, password, email, '', '', securityQuestion, answer)
+            return render_template("index.html")
     else:
-          #insert in db
-          return render_template("index.html")
+        if db.isEmailExists_in_seller(email):
+            msg = 'Email already exists in seller!'
+            print('DATA NOT INSERTED IN SELLER!')
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+        else:
+            print("Data inserted into Seller!")
+            db.insert_into_seller(name, '', email, '', password, '', securityQuestion, answer)
 
 
 @app.route('/about')

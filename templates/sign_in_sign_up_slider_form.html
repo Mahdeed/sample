@@ -87,9 +87,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
     <div class="sign-up" id="sign-up-info">
       <h1>Create Account</h1>
       <form id="sign-up-form" method="post" action="/signup">
-        <input style="margin-bottom: -5px" type="text" placeholder="Name" required/>
-        <input style="margin-bottom: -5px" type="email" placeholder="Email" required/>
-        <input style="margin-bottom: -2px" type="password" placeholder="Password" required/>
+        <input style="margin-bottom: -5px" name="name" type="text" placeholder="Name" required/>
+        <input style="margin-bottom: -5px" type="email" name="email" placeholder="Email" required/>
+        <input style="margin-bottom: -2px" type="password" name="password" placeholder="Password" required/>
         <div style="margin-left: 27px;margin-bottom: -5px;max-width: 260px" class="rs2-select2 rs3-select2 rs4-select2 bo4 of-hidden w-size21 m-t-8 m-b-12">
          <select class="selection-2" name="securityQuestion" id="securityQuestion" required>
             <option disabled="disabled" selected="selected" value="">Select Security Question</option>
@@ -102,7 +102,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
          <select class="selection-2" name="account" required>
             <option disabled="disabled" selected="selected" value="">Create Account As</option>
             <option value="Buyer">Buyer</option>
-            <option value="Celler">Celler</option>
+            <option value="Seller">Seller</option>
          </select>
         </div>
         <button class="control-button up">Sign Up</button>
