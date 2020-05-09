@@ -156,6 +156,48 @@ def get_buyer_data(email):
         db.close()
         return "buyer", data
 
+#Function to get wishlist from the table 'buyer'
+def get_wishlist(email):
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'SELECT p.name, p.price, p.quantity, p.rating, p.warranty, p.type, p.deliveryCharges FROM wish_list w, buyer b, product p  where email = %s AND w.id=b.wish_list'
+        args = email
+        cur.execute(query, args)
+        wish_list = cur.fetchone()
+        if (len)(wish_list) < 1:
+            wish_list = None
+        print(wish_list)
+        print("Record obtained from the table 'wish_list'  ")
+    except Exception as e:
+        print("Error DB could not be connected in getting data from wish_list table")
+    finally:
+        db.commit()
+        db.close()
+        return wish_list
+
+
+#function to get products from the table 'seller'
+def get_products(email):
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'SELECT p.name, p.price, p.quantity, p.rating, p.warranty, p.type, p.deliveryCharges FROM seller s, product p  where email = %s AND p.seller=s.id'
+        args = email
+        cur.execute(query, args)
+        products = cur.fetchone()
+        if (len)(products) < 1:
+            products = None
+        print(products)
+        print("Record obtained from the table 'product'  ")
+    except Exception as e:
+        print("Error DB could not be connected in getting data from product table")
+    finally:
+        db.commit()
+        db.close()
+        return products
 
 #Function to get data from the table 'seller'
 def get_seller_data(email):
