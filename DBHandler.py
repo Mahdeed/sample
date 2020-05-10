@@ -310,6 +310,31 @@ def get_4_products():
         return data
 
 
+#FUNCTION to get data in the price range from the table 'product'
+def get_products_in_range(lower, upper):
+    print('get_products_in_range()')
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'SELECT id, name, price FROM product WHERE price >= %s and price <= %s LIMIT 10'
+        args = (lower, upper)
+        cur.execute(query, args)
+        data = cur.fetchall()
+        if (len)(data) < 1:
+            data = None
+        else:
+            return_data = []
+            for temp in data:
+                return_data.append({'id': str(temp[0]), 'name': temp[1], 'price': temp[2]})
+            data = return_data
+            print("Record obtained from the table 'product' in the price range ")
+    except Exception as e:
+        print("Error DB could not be connected in getting data from seller table")
+    finally:
+        db.close()
+        return data
+
 
 ## FUNCTIONS TO GET USER DATA EEENNNDDD HEEERREEEE ####
 ##################################################################################################################################

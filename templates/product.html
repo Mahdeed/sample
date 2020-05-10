@@ -43,19 +43,19 @@ Filters
 <div class="flex-w">
     <span>Price</span>
 <div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
-<select class="selection-2" name="sorting">
-<option>Low</option>
-<option>0.00</option>
-<option>50.00</option>
-<option>100.00</option>
-<option>150.00</option>
+<select class="selection-2" name="lower_price" >
+<option value="">Low</option>
+<option value="0">0.00</option>
+<option value="500">500.00</option>
+<option value="5000">5000.00</option>
+<option value="10000">10000.00</option>
 </select>
-<select class="selection-2" name="sorting">
-<option>High</option>
-<option>50.00</option>
-<option>110.00</option>
-<option>160.00</option>
-<option>210.00</option>
+<select class="selection-2" name="higher_price">
+<option value="">High</option>
+<option value="20000">20000.00</option>
+<option value="30000">30000.00</option>
+<option value="40000">40000.00</option>
+<option value="50000">50000.00</option>
 </select>
 </div>
 </div>
@@ -66,36 +66,39 @@ Filters
 <div class="m-text15 p-b-12">
 Color
 </div>
-<ul class="flex-w">
-<li class="m-r-10">
-<input class="checkbox-color-filter" id="color-filter1" type="checkbox" name="color-filter1">
+    <div class="checkbox">
+
+
+
+<input class="checkbox-color-filter" id="color-filter1" type="checkbox" name="colorFilter" value="sky-blue">
 <label class="color-filter color-filter1" for="color-filter1"></label>
-</li>
-<li class="m-r-10">
-<input class="checkbox-color-filter" id="color-filter2" type="checkbox" name="color-filter2">
+
+
+<input class="checkbox-color-filter" id="color-filter2" type="checkbox" name="colorFilter" value="blue">
 <label class="color-filter color-filter2" for="color-filter2"></label>
-</li>
-<li class="m-r-10">
-<input class="checkbox-color-filter" id="color-filter3" type="checkbox" name="color-filter3">
+
+
+<input class="checkbox-color-filter" id="color-filter3" type="checkbox" name="colorFilter" value="yellow">
 <label class="color-filter color-filter3" for="color-filter3"></label>
-</li>
-<li class="m-r-10">
-<input class="checkbox-color-filter" id="color-filter4" type="checkbox" name="color-filter4">
+
+
+<input class="checkbox-color-filter" id="color-filter4" type="checkbox" name="colorFilter" value="red">
 <label class="color-filter color-filter4" for="color-filter4"></label>
-</li>
-<li class="m-r-10">
-<input class="checkbox-color-filter" id="color-filter5" type="checkbox" name="color-filter5">
+
+
+<input class="checkbox-color-filter" id="color-filter5" type="checkbox" name="colorFilter" value="grey">
 <label class="color-filter color-filter5" for="color-filter5"></label>
-</li>
-<li class="m-r-10">
-<input class="checkbox-color-filter" id="color-filter6" type="checkbox" name="color-filter6">
+
+
+<input class="checkbox-color-filter" id="color-filter6" type="checkbox" name="colorFilter" value="black">
 <label class="color-filter color-filter6" for="color-filter6"></label>
-</li>
-<li class="m-r-10">
-<input class="checkbox-color-filter" id="color-filter7" type="checkbox" name="color-filter7">
+
+
+<input class="checkbox-color-filter" id="color-filter7" type="checkbox" name="colorFilter" value="silver">
 <label class="color-filter color-filter7" for="color-filter7"></label>
-</li>
-</ul>
+
+
+    </div>
 </div>
 <div class="w-size11">
 <button style="margin-top: -20px;margin-bottom: 50px;width: 235px" type="submit" class="flex-c-m size4 bg7 bo-rad-15 hov1 s-text14 trans-0-4">
