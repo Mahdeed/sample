@@ -86,10 +86,10 @@ def cart():
 @app.route('/profile', methods=["GET", "POST"])
 def profile():
     if request.method == "GET":
-        account, data = db.get_buyer_data(session['email'])
+        account, data = db.get_buyer_data('mahad@kutta.com')
         print(data)
         if data == None:
-            account, data = db.get_seller_data(session['email'])
+            account, data = db.get_seller_data('mahad@kutta.com')
             return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2], phone=data[4])
         else:
             return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4])
@@ -121,9 +121,6 @@ def add_product():
 @app.route('/product')
 def product():
     return render_template("product.html", products=db.get_all_products())
-
-
-
 
 
 
@@ -195,6 +192,12 @@ def contact():
 @app.route('/about')
 def about():
     return render_template("about.html")
+@app.route('/product/search', methods=["POST"])
+def search_product():
+    name = request.form.get('search-product')
+    data = db.get_product_by_name(name)
+    return render_template("product.html", products=data)
+
 
 if __name__ == '__main__':
     app.run()

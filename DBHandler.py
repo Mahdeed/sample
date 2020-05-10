@@ -254,7 +254,7 @@ def get_wishlist(email):
 
 
 #function to get products from the table 'seller'
-def get_products(email):
+def get_products_of_seller(email):
     try:
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
@@ -386,6 +386,32 @@ def get_products_in_range(lower, upper):
                 return_data.append({'id': str(temp[0]), 'name': temp[1], 'price': temp[2]})
             data = return_data
             print("Record obtained from the table 'product' in the price range ")
+    except Exception as e:
+        print("Error DB could not be connected in getting data from seller table")
+    finally:
+        db.close()
+        return data
+
+
+# FUNCTION to get products from searching by 'name' from the table 'product'
+def get_product_by_name(name):
+    print('get_products_by_name(name)')
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'SELECT id, name, price FROM product WHERE name = %s'
+        args = (name)
+        cur.execute(query, args)
+        data = cur.fetchall()
+        if (len)(data) < 1:
+            data = None
+        else:
+            return_data = []
+            for temp in data:
+                return_data.append({'id': str(temp[0]), 'name': temp[1], 'price': temp[2]})
+            data = return_data
+            print("Record obtained from the table 'product' by name of product ")
     except Exception as e:
         print("Error DB could not be connected in getting data from seller table")
     finally:
