@@ -38,6 +38,26 @@ def insert_into_Buyer(name, password, email, phoneNumber, address, securityQuest
         db.commit()
         db.close()
 
+
+# Function to insert info into 'buyer' table ###... address and phone Number
+def insert_into_buyer_address_and_phoneN(email ,address, phoneNumber):
+    print('insert_into_buyer_address_and_phoneN(email ,address, phoneNumber)')
+    try:
+        if isEmailExists_in_buyer(email):
+            db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
+            cursor = db.cursor()
+            print("DATABASE IS CONNECTED in insert_into_Buyer")
+            query = "INSERT INTO buyer(phoneNumber, address)VALUES(%s, %s) WHERE email = %s"
+            args = (phoneNumber, address, email)
+            cursor.execute(query, args)
+            print("Record inserted into the table 'buyer' address and phoneNumber ")
+    except Exception as e:
+        print(str(e))
+    finally:
+        db.commit()
+        db.close()
+
+
 # Function to insert info into the 'cart' table
 def insert_into_cart(cartNo, quantity):
     try:
@@ -123,6 +143,26 @@ def insert_into_seller(name, address, email, phoneNumber, password, ranking, sec
         db.commit()
         db.close()
 
+
+# Function to insert info into 'buyer' table ###... address and phone Number
+def insert_into_seller_address_and_phoneN(email ,address, phoneNumber):
+    print('insert_into_seller_address_and_phoneN(email ,address, phoneNumber)')
+    try:
+        if isEmailExists_in_buyer(email):
+            db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
+            cursor = db.cursor()
+            print("DATABASE IS CONNECTED in insert_into_Buyer")
+            query = "INSERT INTO seller(phoneNumber, address)VALUES(%s, %s) WHERE email = %s"
+            args = (phoneNumber, address, email)
+            cursor.execute(query, args)
+            print("Record inserted into the table 'seller' address and phoneNumber ")
+    except Exception as e:
+        print(str(e))
+    finally:
+        db.commit()
+        db.close()
+
+
 #### FUNCTIONS TO 'INSERT' INTO DB "ENDDD" HEREEEE ####
 #################################################################################################################################
 
@@ -152,7 +192,6 @@ def get_buyer_data(email):
     except Exception as e:
         print("Error DB could not be connected")
     finally:
-        db.commit()
         db.close()
         return "buyer", data
 
@@ -216,9 +255,60 @@ def get_seller_data(email):
     except Exception as e:
         print("Error DB could not be connected in getting data from seller table")
     finally:
-        db.commit()
         db.close()
         return "seller", data
+
+
+
+# Function to get all the products(id, name, price) from the table 'product'
+def get_all_products():
+    print('get_product()')
+    try:
+        db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'SELECT id, name, price FROM product'
+        cur.execute(query)
+        data = cur.fetchall()
+        if (len)(data) < 1:
+            data = None
+        else:
+            return_data = []
+            for temp in data:
+                return_data.append({'id': str(temp[0]), 'name': temp[1], 'price':  temp[2]})
+            data = return_data
+            print("Record obtained from the table 'product' ")
+    except Exception as e:
+        print("Error DB could not be connected in getting data from seller table")
+    finally:
+        db.close()
+        return data
+
+
+# FUNCTION to get only 4 products from the table 'product'
+def get_4_products():
+    print('get_4_products()')
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'SELECT id, name, price FROM product LIMIT 4'
+        cur.execute(query)
+        data = cur.fetchall()
+        if (len)(data) < 1:
+            data = None
+        else:
+            return_data = []
+            for temp in data:
+                return_data.append({'id': str(temp[0]), 'name': temp[1], 'price': temp[2]})
+            data = return_data
+            print("Record obtained from the table 'product' (only 4 for the time being) ")
+    except Exception as e:
+        print("Error DB could not be connected in getting data from seller table")
+    finally:
+        db.close()
+        return data
+
 
 
 ## FUNCTIONS TO GET USER DATA EEENNNDDD HEEERREEEE ####

@@ -2,13 +2,18 @@ import DBHandler as db
 from flask import Flask, render_template, request, session
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'secret!'
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+
+
 
 @app.route('/')
 def index():
-    db.connect()
+
     # data = db.get_buyer_data("b@gmail.com")
     # print(data)
-    return render_template("index.html", products=[{'id': "03", 'name': "Jeans", 'price': "200"}])
+    return render_template("index.html", products=db.get_4_products())
 
 
 @app.route('/logout')
@@ -37,7 +42,7 @@ def signin():
 
         if data is not None:
             session['email'] = email
-            print("Printing user data in app.py and the function signin : " + data)
+            print(data)
             user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
             # user will have data extracted from db for the buyer or the seller
             return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
@@ -90,9 +95,33 @@ def about():
 def cart():
     return render_template("cart.html",products=[{'id': "03", 'name': "Jeans", 'price': "200", 'quantity': "3"}])
 
-@app.route('/profile')
+@app.route('/profile', methods=["GET", "POST"])
 def profile():
-    return render_template("profile.html", user="seller", username="abc", email="bcsf17@gmail.com", address="address", phone="090078601")
+    if request.method == "GET":
+        account, data = db.get_buyer_data(session['email'])
+        print(data)
+        if data == None:
+            account, data = db.get_seller_data(session['email'])
+            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2], phone=data[4])
+        else:
+            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4])
+    else:
+        email = request.form.get(session['email'])
+        address = request.form.get('address')
+        phoneNumber = request.form.get('phoneNumber')
+        account, data = db.get_buyer_data(session['email'])
+        print(data)
+        if data == None:
+            account, data = db.get_seller_data(session['email'])
+            db.insert_into_seller_address_and_phoneN(session['email'], address, phoneNumber)
+            data = db.get_seller_data(session['email'])
+            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2], phone=data[4])
+        else:
+            db.insert_into_buyer_address_and_phoneN(session['email'], address, phoneNumber)
+            db.get_buyer_data(session['email'])
+            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4])
+
+
 
 @app.route('/edit_product')
 def edit_product():
@@ -109,7 +138,7 @@ def contact():
 
 @app.route('/product')
 def product():
-    return render_template("product.html", products=[{'id': "03", 'name': "Jeans", 'price': "200"}])
+    return render_template("product.html", products=db.get_all_products())
 
 @app.route('/forget')
 def forget_password_form():
@@ -139,13 +168,14 @@ def reset_password():
 def product_detail(id):
     return render_template("product-detail.html")
 
-@app.route('/faq')
-def faq():
-    return render_template("faq.html")
-
-@app.route('/product/filter')
+@app.route('/product/filter', methods=["GET", "POST"])
 def filter():
-    pass
+    if request.method == "POST":
+        list_category = request.form.getlist('category')
+        price = request.form.get('sorting')
+
+        print(price)
+        return render_template("product.html")
 
 if __name__ == '__main__':
     app.run()

@@ -82,7 +82,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </div>
       {% endif %}
       <h1>Login</h1>
-      <form id="sign-in-form" method="get" action="{{ url_for('signin') }}">
+      <form id="sign-in-form" method="post" action="{{ url_for('signin') }}">
         <input type="email"  name="email" placeholder="Email"/>
         <input type="password" name="password" placeholder="Password"/>
         <p class="forgot-password"><a href="{{ url_for('forget_password') }}">Forgot your password?</a></p>
