@@ -24,6 +24,31 @@ Cart
 <th class="column-4 p-l-70">Quantity</th>
 <th class="column-5">Total</th>
 </tr>
+{% if products %}
+    {% for product in products %}
+        <tr class="table-row">
+        <td class="column-1">
+        <div class="cart-img-product b-rad-4 o-f-hidden">
+        <img src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
+        </div>
+        </td>
+        <td class="column-2">{{product['name']}}</td>
+        <td id="item-price-{{product['quantity']}}" class="column-3">${{product['price']}}</td>
+        <td class="column-4">
+        <div class="flex-w bo5 of-hidden w-size17">
+        <button onclick="changeItemTotal({{product['quantity']}},0);" class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
+        <i class="fs-12 fa fa-minus" aria-hidden="true"></i>
+        </button>
+        <input id="item-{{product['quantity']}}" class="size8 m-text18 t-center num-product" type="number" name="num-product1" value="1" min="1" max="{{product['quantity']}}">
+        <button id="product-increase-quantity-{{product['quantity']}}" onclick="changeItemTotal({{product['quantity']}},1);" class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
+        <i class="fs-12 fa fa-plus" aria-hidden="true"></i>
+        </button>
+        </div>
+        </td>
+        <td  id="total-item-{{product['quantity']}}" class="column-5 total">${{product['price']}}</td>
+        </tr>
+    {% endfor %}
+{% endif %}
 <tr class="table-row">
 <td class="column-1">
 <div class="cart-img-product b-rad-4 o-f-hidden">
@@ -163,6 +188,10 @@ Proceed to Checkout
     </script>
     <script>
         function changeItemTotal(no, indication) {
+            if((parseInt(document.getElementById("item-"+String(no)).value)+1) == parseInt(document.getElementById("item-"+String(no)).getAttribute("max")))
+            {
+                document.getElementById("product-increase-quantity-"+String(no)).setAttribute("disabled","disabled");
+            }
             let quantity = parseInt(document.getElementById("item-"+String(no)).value);
             let price = parseInt(((document.getElementById("item-price-"+String(no)).innerText).split("$"))[1]);
             if(indication == 0)

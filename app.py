@@ -88,7 +88,7 @@ def about():
 
 @app.route('/cart')
 def cart():
-    return render_template("cart.html")
+    return render_template("cart.html",products=[{'id': "03", 'name': "Jeans", 'price': "200", 'quantity': "3"}])
 
 @app.route('/profile')
 def profile():
@@ -109,7 +109,7 @@ def contact():
 
 @app.route('/product')
 def product():
-    return render_template("product.html")
+    return render_template("product.html", products=[{'id': "03", 'name': "Jeans", 'price': "200"}])
 
 @app.route('/forget')
 def forget_password_form():
@@ -138,6 +138,10 @@ def reset_password():
 @app.route('/product/<int:id>')
 def product_detail(id):
     return render_template("product-detail.html")
+
+@app.route('/product/filter')
+def filter():
+    pass
 
 if __name__ == '__main__':
     app.run()
