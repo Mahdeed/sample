@@ -128,7 +128,22 @@ def edit_product():
 
 @app.route('/add_product')
 def add_product():
-    return render_template("add_edit_product.html", title="Add Product", name="Product Name", type="Type", price= "123", warranty="Years", charges="123")
+    if request.method == "GET":
+        return render_template("add_edit_product.html", title="Add Product", name="Product Name", type="Type",
+                               price="123", warranty="Years", charges="123")
+
+    else:
+        name = request.form.get('name')
+        type = request.form.get('type')
+        price = int(request.form.get('price'))
+        warranty = int(request.form.get('warranty'))
+        charges = int(request.form.get('charges'))
+        email = 'mahad@kutta.com'
+        id = db.get_seller_id(email)
+        db.insert_into_product(name, price, warranty, type, charges, id)
+        data=db.get_products_of_seller(email)
+        return render_template("add_edit_product.html", name="cocaine", type="men", warranty="2 years", price="123",
+                               charges="1234")
 
 
 @app.route('/product')

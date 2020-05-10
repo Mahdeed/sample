@@ -127,13 +127,13 @@ def insert_into_order(orderNo, shipmentFee):
         db.close()
 
 #Function to insert info into 'product' table #
-def insert_into_product(name, price, rating, warranty, type, deliveryCharges, seller):
+def insert_into_product(name, price, warranty, type, deliveryCharges, seller):
     try:
         db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
         cursor = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = "INSERT INTO product(name, price, rating, warranty, type, deliveryCharges, seller)VALUES(%s, %s, %s, %s, %s, %s, %s)"
-        args = (name, price, rating, warranty, type, deliveryCharges, seller)
+        query = "INSERT INTO product(name, price, warranty, type, deliveryCharges, seller)VALUES(%s, %s, %s, %s, %s, %s)"
+        args = (name, price, warranty, type, deliveryCharges, seller)
         cursor.execute(query, args)
         print("Record inserted into the table 'product' ")
     except Exception as e:
