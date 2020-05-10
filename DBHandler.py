@@ -237,7 +237,7 @@ def get_wishlist(email):
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT p.name, p.price, p.quantity, p.rating, p.warranty, p.type, p.deliveryCharges FROM wish_list w, buyer b, product p  where email = %s AND w.id=b.wish_list'
+        query = 'SELECT p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges FROM wish_list w, buyer b, product p  where b.email = %s AND w.id=b.wish_list'
         args = email
         cur.execute(query, args)
         wish_list = cur.fetchone()
@@ -259,7 +259,28 @@ def get_products(email):
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT p.name, p.price, p.quantity, p.rating, p.warranty, p.type, p.deliveryCharges FROM seller s, product p  where email = %s AND p.seller=s.id'
+        query = 'SELECT p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges FROM seller s, product p  where s.email = %s AND p.seller=s.id'
+        args = email
+        cur.execute(query, args)
+        products = cur.fetchone()
+        if (len)(products) < 1:
+            products = None
+        print(products)
+        print("Record obtained from the table 'product'  ")
+    except Exception as e:
+        print("Error DB could not be connected in getting data from product table")
+    finally:
+        db.commit()
+        db.close()
+        return products
+
+#Function to get cart items
+def get_cart_items(email):
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'SELECT p.id, p.name, p.price, i.quantity from product p, cart c, cartitems i, buyer b where b.email=%s c.buyerId=b.id and i.cartNo=c.cartNowhere email = %s AND p.seller=s.id'
         args = email
         cur.execute(query, args)
         products = cur.fetchone()
