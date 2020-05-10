@@ -79,9 +79,32 @@ def signup():
                 db.insert_into_seller(name, '', email, '', password, '', securityQuestion, answer)
                 print("Data inserted into Seller!")
 
-@app.route('/cart')
+@app.route('/cart', methods=["GET", "POST"])
 def cart():
-    return render_template("cart.html",products=[{'id': "03", 'name': "Jeans", 'price': "200", 'quantity': "3"}])
+    if request.method == "GET":
+        return render_template("cart.html")
+    else:
+       print("hello from cart :)")
+       id=request.form.get('id')
+       data=db.get_product_by_id(id)
+       buyerId=db.get_buyer_id("mahdeed@gmail.com")
+       db.insert_into_cart(buyerId)
+       cart=db.get_cart_no(buyerId)
+       db.insert_into_cartItems(id, cart, 1)
+       print(data)
+       return render_template("cart.html",products=[{'id': id, 'name': data[0]["name"], 'price': data[0]["price"], 'quantity': "1", 'charges': data[0]["charges"] }])
+
+@app.route('/invoice', methods=["GET", "POST"])
+def invoice():
+    print("invoice")
+    products = db.get_cart_items("mahdeed@gmail.com")
+    account,buyer = db.get_buyer_data("mahdeed@gmail.com")
+    total=0
+    for x in products:
+        total = total+x[2]
+    db.insert_into_invoice(buyer[1],buyer[0],total)
+    print(total)
+    return(render_template("invoice.html",buyer=buyer, total=total))
 
 @app.route('/profile', methods=["GET", "POST"])
 def profile():
