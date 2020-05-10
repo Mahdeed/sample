@@ -92,7 +92,11 @@
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                          <form class="form" novalidate="" action="{{url_for('edit_product')}}" method="post">
+        {% if title == "Edit" %}
+            <form class="form" novalidate="" action="{{url_for('edit_product')}}" method="post">
+        {% else %}
+            <form class="form" novalidate="" action="{{url_for('add_product')}}" method="post">
+        {% endif %}
                     <div class="row">
                       <div class="col">
                         <div class="row">
