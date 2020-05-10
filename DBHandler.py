@@ -39,6 +39,24 @@ def insert_into_Buyer(name, password, email, phoneNumber, address, securityQuest
         db.close()
 
 
+# FUNCTION to insert only password for table 'buyer'#
+def insert_password_in_buyer(email, password):
+    print("insert_password_in_buyer(email, password)")
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cursor = db.cursor()
+        print("DATABASE IS CONNECTED in insert_into_Buyer")
+        query = "INSERT INTO buyer(password)VALUES(%s) WHERE email = %s"
+        args = (password, email)
+        cursor.execute(query, args)
+        print("Record inserted into the table 'buyer', password inserted ")
+    except Exception as e:
+        print(str(e))
+    finally:
+        db.commit()
+        db.close()
+
+
 # Function to insert info into 'buyer' table ###... address and phone Number
 def insert_into_buyer_address_and_phoneN(email ,address, phoneNumber):
     print('insert_into_buyer_address_and_phoneN(email ,address, phoneNumber)')
@@ -142,6 +160,24 @@ def insert_into_seller(name, address, email, phoneNumber, password, ranking, sec
     finally:
         db.commit()
         db.close()
+
+# FUNCTION to insert only password for table 'buyer'#
+def insert_password_in_seller(email, password):
+    print("insert_password_in_seller(email, password)")
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cursor = db.cursor()
+        print("DATABASE IS CONNECTED in insert_into_Buyer")
+        query = "INSERT INTO seller(password)VALUES(%s) WHERE email = %s"
+        args = (password, email)
+        cursor.execute(query, args)
+        print("Record inserted into the table 'seller', password inserted ")
+    except Exception as e:
+        print(str(e))
+    finally:
+        db.commit()
+        db.close()
+
 
 
 # Function to insert info into 'buyer' table ###... address and phone Number
@@ -419,7 +455,6 @@ def isPasswordCorrect_in_buyer(email, password):
             print("ERRORRRR DB not connected in get password for buyer")
         finally:
             if db != None:
-                db.commit()
                 db.close()
                 return True
 
@@ -446,13 +481,32 @@ def isPasswordCorrect_in_seller(email, password):
             print("ERRORRRR DB could not be connected in get password for seller")
         finally:
             if db != None:
-                db.commit()
                 db.close()
                 return True
 
 
 
-
+# FUNCTION to check if security question and both answer are correct#
+def is_security_question_and_answer_correct(email, securityQuestion, answer):
+    print('is_security_question_and_answer_correct(securityQuestion, answer)')
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        print("DATABASE IS CONNECTED")
+        cursor = db.cursor()
+        query = "SELECT securityQuestion, answer FROM buyer WHERE email = %s"
+        args = (email)
+        cursor.execute(query, args)
+        securityQuestion_answer = cursor.fetchone()
+        print(securityQuestion_answer)
+        if securityQuestion_answer[0] == securityQuestion and securityQuestion_answer[1] == answer:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print("ERRORRRR DB not connected in get password for buyer")
+    finally:
+        if db != None:
+            db.close()
 
 
 ## FUNCTIONS TO CHECKS EMAILS AND STUFF EENNNDDDD Heeerrreeee #######

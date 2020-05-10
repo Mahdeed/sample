@@ -21,9 +21,9 @@
   <div class="form">
     <div class="sign-up" id="sign-up-info">
       <h1 style="font-size: xx-large">Reset Password</h1>
-      <form style="margin-top: 30px" id="sign-up-form" method="post" action="#">
+      <form style="margin-top: 30px" id="sign-up-form" method="post" action="{{ url_for('reset_password') }}">
         <input disabled="disabled" type="email" placeholder="{{email}}" required/>
-        <input type="password" placeholder="New Password"/>
+        <input type="password" name="password" placeholder="New Password"/>
         <button class="control-button up">Reset</button>
       </form>
     </div>

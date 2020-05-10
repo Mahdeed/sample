@@ -21,7 +21,7 @@
   <div class="form">
     <div class="sign-up" id="sign-up-info">
       <h1 style="font-size: xx-large">Security Question</h1>
-      <form style="margin-top: 30px" id="sign-up-form" method="post" action="#">
+      <form style="margin-top: 30px" id="sign-up-form" method="post" action="{{ url_for('security_question') }}">
         <div style="margin-left: 13px;max-width: 260px" class="rs2-select2 rs3-select2 rs4-select2 bo4 of-hidden w-size21 m-t-8 m-b-12">
          <select class="selection-2" name="securityQuestion" id="securityQuestion" required>
             <option disabled="disabled" selected="selected" value="">Select Security Question</option>

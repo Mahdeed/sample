@@ -122,29 +122,46 @@ def add_product():
 def product():
     return render_template("product.html", products=db.get_all_products())
 
-@app.route('/forget')
-def forget_password_form():
-    return render_template("forget.html")
 
-@app.route('/question')
-def security_question_form():
-    return render_template("security.html")
 
-@app.route('/reset')
-def reset_password_form():
-    return render_template("reset.html", email="bcsf17a@pucit.edu.pk")
 
-@app.route('/forget_password')
+
+
+@app.route('/forget_password', methods=["GET", "POST"])
 def forget_password():
+    if request.method == "POST":
+        session['email'] = request.form.get('email')
+        if db.isEmailExists_in_buyer(session['email']):
+            return render_template("security.html")
+        elif db.isEmailExists_in_seller(session['email']):
+            return render_template("security.html")
+        else:
+            return render_template("forget.html")
+
     return render_template("forget.html")
 
-@app.route('/security_question')
+@app.route('/security_question', methods=["POST", "GET"])
 def security_question():
-    return render_template("security.html")
+    if request.method == "POST":
+        securityQuestion = request.form.get('securityQuestion')
+        answer = request.form.get('answer')
+        if db.is_security_question_and_answer_correct(session['email'], securityQuestion, answer):
+            return render_template("reset.html", email=session['email'])
+    else:
+        return render_template("security.html")
 
-@app.route('/reset_password')
+@app.route('/reset_password', methods=["GET", "POST"])
 def reset_password():
-    return render_template("reset.html", email="bcsf17a@pucit.edu.pk")
+    if request.method == "POST":
+        password = request.form.get('password')
+        if db.isEmailExists_in_buyer(session['email']):
+            db.insert_password_in_buyer(session['email'], password)
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg='')
+        else:
+            db.insert_password_in_seller(session['email'], password)
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg='')
+    else:
+        return render_template("reset.html", email=session['email'])
 
 @app.route('/product/<int:id>')
 def product_detail(id):
