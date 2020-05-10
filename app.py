@@ -154,12 +154,12 @@ def product_detail(id):
 def filter():
     if request.method == "POST":
         list_category = request.form.getlist('category')
+        print(list_category)
         lower_price = request.form.get('lower_price')
         higher_price = request.form.get('higher_price')
         if lower_price and higher_price is not None:
             print(db.get_products_in_range(int(lower_price), int(higher_price)))
-        colour = request.form.getlist('colourFilter')
-        print(colour)
+
         return render_template("product.html")
 
 ############### Static Pages ################################
