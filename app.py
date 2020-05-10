@@ -6,21 +6,14 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
-
-
 @app.route('/')
 def index():
-
-    # data = db.get_buyer_data("b@gmail.com")
-    # print(data)
     return render_template("index.html", products=db.get_4_products())
-
 
 @app.route('/logout')
 def logout():
    session.pop('email', None)
    return render_template('index.html')
-
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -86,11 +79,6 @@ def signup():
                 db.insert_into_seller(name, '', email, '', password, '', securityQuestion, answer)
                 print("Data inserted into Seller!")
 
-@app.route('/about')
-def about():
-    return render_template("about.html")
-
-
 @app.route('/cart')
 def cart():
     return render_template("cart.html",products=[{'id': "03", 'name': "Jeans", 'price': "200", 'quantity': "3"}])
@@ -121,8 +109,6 @@ def profile():
             db.get_buyer_data(session['email'])
             return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4])
 
-
-
 @app.route('/edit_product')
 def edit_product():
     return render_template("add_edit_product.html", title="Edit", product_name="Shirt", type="Mens", price= "123", warranty="2 years", charges="123")
@@ -130,10 +116,6 @@ def edit_product():
 @app.route('/add_product')
 def add_product():
     return render_template("add_edit_product.html", title="Add Product", product_name="Product Name", type="Type", price= "123", warranty="Years", charges="123")
-
-@app.route('/contact')
-def contact():
-    return render_template("contact.html")
 
 
 @app.route('/product')
@@ -180,8 +162,18 @@ def filter():
         print(colour)
         return render_template("product.html")
 
+############### Static Pages ################################
 @app.route('/faq')
 def faq():
     return render_template("faq.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
 if __name__ == '__main__':
     app.run()
