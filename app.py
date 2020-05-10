@@ -109,13 +109,26 @@ def profile():
             db.get_buyer_data(session['email'])
             return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4])
 
-@app.route('/edit_product')
+@app.route('/edit_product', methods=["GET", "POST"])
 def edit_product():
-    return render_template("add_edit_product.html", title="Edit", product_name="Shirt", type="Mens", price= "123", warranty="2 years", charges="123")
+    if request.method == "GET":
+        return render_template("add_edit_product.html", name="shirt", type="men", warranty="2 years", price="123", charges="123")
+    else:
+        name = request.form.get('name')
+        type = request.form.get('type')
+        price = int(request.form.get('price'))
+        warranty = int(request.form.get('warranty'))
+        charges = int(request.form.get('charges'))
+        email = 'mahad@kutta.com'
+        id = db.get_seller_id(email)
+        db.edit_product(name, price, warranty, type, charges, id)
+        data=db.get_products_of_seller(email)
+        return render_template("add_edit_product.html", name="cocaine", type="men", warranty="2 years", price="123",
+                               charges="1234")
 
 @app.route('/add_product')
 def add_product():
-    return render_template("add_edit_product.html", title="Add Product", product_name="Product Name", type="Type", price= "123", warranty="Years", charges="123")
+    return render_template("add_edit_product.html", title="Add Product", name="Product Name", type="Type", price= "123", warranty="Years", charges="123")
 
 
 @app.route('/product')

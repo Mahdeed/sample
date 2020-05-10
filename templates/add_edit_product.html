@@ -92,14 +92,14 @@
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                          <form class="form" novalidate="">
+                          <form class="form" novalidate="" action="{{url_for('edit_product')}}" method="post">
                     <div class="row">
                       <div class="col">
                         <div class="row">
                           <div class="col">
                             <div class="form-group">
                               <label>Product Name</label>
-                              <input class="form-control" type="text" name="name" placeholder="{{ product_name }}" value="{{ product_name }}">
+                              <input class="form-control" type="text" name="name" placeholder="{{ name }}" value="{{ name }}">
                             </div>
                           </div>
                         </div>
@@ -107,7 +107,7 @@
                           <div class="col">
                             <div class="form-group">
                               <label>Type</label>
-                              <input class="form-control" type="text" placeholder="{{ type }}">
+                              <input class="form-control" type="text" name="type" placeholder="{{ type }}">
                             </div>
                           </div>
                         </div>
@@ -115,7 +115,7 @@
                           <div class="col">
                             <div class="form-group">
                               <label>Price</label>
-                              <input class="form-control" type="text" placeholder="{{ price }}">
+                              <input class="form-control" type="text" name="price" placeholder="{{ price }}">
                             </div>
                           </div>
                         </div>
@@ -123,7 +123,7 @@
                           <div class="col">
                             <div class="form-group">
                               <label>Warranty</label>
-                              <input class="form-control" type="text" placeholder="{{ warranty }}">
+                              <input class="form-control" type="text" name="warranty" placeholder="{{ warranty }}">
                             </div>
                           </div>
                         </div>
@@ -131,7 +131,7 @@
                           <div class="col">
                             <div class="form-group">
                               <label>Delivery Chargers</label>
-                              <input class="form-control" type="text" placeholder="{{ charges }}">
+                              <input class="form-control" type="text" name="charges" placeholder="{{ charges }}">
                             </div>
                           </div>
                         </div>
