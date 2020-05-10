@@ -167,6 +167,10 @@ def reset_password():
 def product_detail(id):
     return render_template("product-detail.html")
 
+@app.route('/product/search')
+def search():
+    pass
+
 @app.route('/product/filter', methods=["GET", "POST"])
 def filter():
     if request.method == "POST":
