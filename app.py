@@ -139,6 +139,10 @@ def reset_password():
 def product_detail(id):
     return render_template("product-detail.html")
 
+@app.route('/faq')
+def faq():
+    return render_template("faq.html")
+
 @app.route('/product/filter')
 def filter():
     pass
