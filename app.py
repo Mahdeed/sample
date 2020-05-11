@@ -64,6 +64,7 @@ def signup():
         print(securityQuestion)
         print(answer)
         print(account)
+        session['email'] = email
         if account == "Buyer":
             if db.isEmailExists_in_buyer(email):
                 msg = 'Email already exists!!'
@@ -86,7 +87,7 @@ def signup():
 @app.route('/cart', methods=["GET", "POST"])
 def cart():
     if request.method == "GET":
-        items = db.get_cart_items('sample@gmail.com')
+        items = db.get_cart_items(session['email'])
         return render_template("cart.html",products=None,total=0,charges=0)
     else:
           print("hello from cart :)")
@@ -126,7 +127,11 @@ def invoice():
 @app.route('/profile', methods=["GET", "POST"])
 def profile():
     if request.method == "GET":
-        return render_template("profile.html", user="none", username=" ", email=" ", address=" ", phone=" ")
+        account,data = db.get_buyer_data(session['email'])
+        if data == None:
+            account, data = db.get_seller_data(session['email'])
+        return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2],
+                               phone=data[4])
     else:
         email = request.form.get(session['email'])
         address = request.form.get('address')

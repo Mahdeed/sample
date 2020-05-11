@@ -22,9 +22,6 @@ def connect():
 def insert_into_Buyer(name, password, email, phoneNumber, address, securityQuestion, answer):
     print("insert_into_Buyer")
     try:
-        if isEmailExists_in_seller(email):
-            return None
-        else:
             db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
             cursor = db.cursor()
             print("DATABASE IS CONNECTED in insert_into_Buyer")
