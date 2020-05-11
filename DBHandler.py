@@ -177,13 +177,13 @@ def edit_product(name, price, warranty, type, deliveryCharges, seller):
 #Function to insert info into 'seller' table #
 def insert_into_seller(name, address, email, phoneNumber, password, ranking, securityQuestion, answer):
     try:
-        if isEmailExists_in_buyer():
+        if isEmailExists_in_buyer(email):
             return None
         else:
             db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
             cursor = db.cursor()
             print("DATABASE IS CONNECTED")
-            query = "INSERT INTO buyer(name, address, email, phoneNumber, password, ranking, securityQuestion, answer)VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+            query = "INSERT INTO seller(name, address, email, phoneNumber, password, ranking, securityQuestion, answer)VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
             args = (name, address, email, phoneNumber, password, ranking, securityQuestion, answer)
             cursor.execute(query, args)
             print("Record inserted into the table 'seller' ")
@@ -370,7 +370,7 @@ def get_cart_items(email):
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT p.id, p.name, p.price, i.quantity from product p, cart c, cartItems i, buyer b where b.email=%s AND c.buyerId=b.id and i.cartNo=c.cartNo and p.id=i.productId'
+        query = 'SELECT p.id, p.name, p.price, p.deliveryCharges, i.quantity from product p, cart c, cartItems i, buyer b where b.email=%s AND c.buyerId=b.id and i.cartNo=c.cartNo and p.id=i.productId'
         args = email
         cur.execute(query, args)
         list=[]
@@ -378,7 +378,7 @@ def get_cart_items(email):
         if (len)(products) < 1:
             products = None
         for p in products:
-            list.append({'id':p[0],'name': p[1],'price':p[2],'quantity':p[3]})
+            list.append({'id':str(p[0]),'name': p[1],'price':p[2],'quantity':p[4],'charges':p[3]})
         print(list)
         print("Record obtained from the table 'product'  ")
     except Exception as e:
@@ -386,7 +386,7 @@ def get_cart_items(email):
     finally:
         db.commit()
         db.close()
-        return products
+        return list
 
 #Function to get data from the table 'seller'
 def get_seller_data(email):
@@ -594,7 +594,6 @@ def isEmailExists_in_seller(email):
     except Exception as e:
         print("ERROR DB is not connected")
     finally:
-        if db!=None:
             db.close()
 
 

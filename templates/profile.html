@@ -284,10 +284,12 @@
         <div class="card mb-3">
           <div class="card-body">
             <div class="px-xl-3">
-              <button class="btn btn-block btn-secondary">
+              <form action="{{url_for('logout')}}" method="post">
+                <button class="btn btn-block btn-secondary">
                 <i class="fa fa-sign-out"></i>
                 <span>Logout</span>
               </button>
+              </form>
             </div>
           </div>
         </div>

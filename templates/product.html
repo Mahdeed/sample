@@ -49,17 +49,17 @@ Price
 <div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
 <select class="selection-2" name="lower_price" >
 <option value="">Low</option>
-<option value="0">0.00</option>
-<option value="500">500.00</option>
-<option value="5000">5000.00</option>
-<option value="10000">10000.00</option>
+<option value="0">0</option>
+<option value="500">500</option>
+<option value="5000">5000</option>
+<option value="10000">10000</option>
 </select>
 <select class="selection-2" name="higher_price">
 <option value="">High</option>
-<option value="20000">20000.00</option>
-<option value="30000">30000.00</option>
-<option value="40000">40000.00</option>
-<option value="50000">50000.00</option>
+<option value="20000">20000</option>
+<option value="30000">30000</option>
+<option value="40000">40000</option>
+<option value="50000">50000</option>
 </select>
 </div>
 </div>
@@ -91,7 +91,7 @@ Filter
             <div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
             <div class="block2">
             <div class="block2-img wrap-pic-w of-hidden pos-relative">
-            <img src="{{ url_for('static', filename='images/item-0'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
+            <img src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
             <div class="block2-overlay trans-0-4">
             <a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
             <i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
@@ -112,7 +112,7 @@ Filter
              {{product['name']}}
             </a>
             <span class="block2-price m-text6 p-r-5">
-            {{product['price']}}
+            {{product['price']}} PKR
             </span>
             </div>
             </div>
@@ -121,352 +121,12 @@ Filter
     {% else %}
         <p style="font-size: xx-large;margin-left: 350px;margin-top: 50px">Nothing Found</p>
     {% endif %}
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
 
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-<img src="{{ url_for('static', filename='images/item-02.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="{{ url_for('product_detail',id='03') }}" class="block2-name dis-block s-text3 p-b-5">
-Herschel supply co 25l
-</a>
-<span class="block2-price m-text6 p-r-5">
-$75.00
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative">
-<img src="{{ url_for('static', filename='images/item-03.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-<button type="submit" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
- Denim jacket blue
-</a>
-<span class="block2-price m-text6 p-r-5">
-$92.50
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative">
-<img src="{{ url_for('static', filename='images/item-05.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Coach slim easton black
-</a>
-<span class="block2-price m-text6 p-r-5">
-$165.90
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelsale">
-<img src="{{ url_for('static', filename='images/item-07.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Frayed denim shorts
-</a>
-<span class="block2-oldprice m-text7 p-r-5">
-$29.50
-</span>
-<span class="block2-newprice m-text8 p-r-5">
-$15.90
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-<img src="{{ url_for('static', filename='images/item-01.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Herschel supply co 25l
-</a>
-<span class="block2-price m-text6 p-r-5">
-$75.00
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative">
-<img src="{{ url_for('static', filename='images/item-14.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Denim jacket blue
-</a>
-<span class="block2-price m-text6 p-r-5">
-$92.50
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-<img src="{{ url_for('static', filename='images/item-06.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Herschel supply co 25l
-</a>
-<span class="block2-price m-text6 p-r-5">
-$75.00
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative">
-<img src="{{ url_for('static', filename='images/item-08.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Denim jacket blue
-</a>
-<span class="block2-price m-text6 p-r-5">
-$92.50
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative">
-<img src="{{ url_for('static', filename='images/item-10.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Coach slim easton black
-</a>
-<span class="block2-price m-text6 p-r-5">
-$165.90
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelsale">
-<img src="{{ url_for('static', filename='images/item-11.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Frayed denim shorts
-</a>
-<span class="block2-oldprice m-text7 p-r-5">
-$29.50
-</span>
-<span class="block2-newprice m-text8 p-r-5">
-$15.90
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-<img src="{{ url_for('static', filename='images/item-12.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Herschel supply co 25l
-</a>
-<span class="block2-price m-text6 p-r-5">
-$75.00
-</span>
-</div>
-</div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
-
-<div class="block2">
-<div class="block2-img wrap-pic-w of-hidden pos-relative">
-<img src="{{ url_for('static', filename='images/item-15.jpg') }}" alt="IMG-PRODUCT">
-<div class="block2-overlay trans-0-4">
-<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-</a>
-<div class="block2-btn-addcart w-size1 trans-0-4">
-
-<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-Add to Cart
-</button>
-</div>
-</div>
-</div>
-<div class="block2-txt p-t-20">
-<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-Denim jacket blue Myy !!!!
-</a>
-<span class="block2-price m-text6 p-r-5">
-$92.50
-</span>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>
 </div>
 </section>
-
 {% endblock %}
 
 {% block extra_script %}

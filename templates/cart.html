@@ -31,7 +31,7 @@ Cart
         <tr class="table-row">
         <td class="column-1">
         <div class="cart-img-product b-rad-4 o-f-hidden">
-        <img src="{{ url_for('static', filename='images/item-0'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
+        <img src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
         </div>
         </td>
         <td class="column-2">{{product['name']}}</td>
@@ -68,10 +68,11 @@ Apply coupon
 </div>
 </div>
 <div class="size10 trans-0-4 m-t-10 m-b-10">
-
-<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+<form action="{{url_for('product')}}">
+<button type="submit" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
 Update Cart
 </button>
+</form>
 </div>
 </div>
 
@@ -85,7 +86,7 @@ Cart Totals
 Subtotal:
 </span>
 <span id="subtotal" class="m-text21 w-size20 w-full-sm">
-${{products[0]['price']}}
+{{total}}
 </span>
 </div>
 
@@ -95,7 +96,7 @@ Delivery Charges:
 </span>
 <div class="w-size20 w-full-sm">
 <p class="s-text8 p-b-23">
-${{products[0]['charges']}}
+{{charges}}
 </p>
 
 <div class="size14 trans-0-4 m-b-10">
@@ -108,7 +109,7 @@ ${{products[0]['charges']}}
 Total:
 </span>
 <span id="grandtotal" class="m-text21 w-size20 w-full-sm">
-${{products[0]['price']+products[0]['charges']}}
+{{total+charges}}
 </span>
 </div>
 <div class="size15 trans-0-4">

@@ -10,11 +10,13 @@ app.config["SESSION_TYPE"] = "filesystem"
 def index():
     return render_template("index.html", products=db.get_4_products())
 
-@app.route('/logout')
+@app.route('/logout', methods=["GET","POST"])
 def logout():
-   session.pop('email', None)
-   return render_template('index.html')
-
+    if request.method == "POST":
+        session.pop('email', None)
+        return render_template('index.html')
+    else:
+        return render_template('index.html')
 
 @app.route('/login', methods=["GET", "POST"])
 def signin():
@@ -35,6 +37,7 @@ def signin():
 
         if data is not None:
             session['email'] = email
+            print(session['email'])
             print(data)
             user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
             # user will have data extracted from db for the buyer or the seller
@@ -76,46 +79,54 @@ def signup():
                 print('DATA NOT INSERTED IN SELLER!')
                 return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
             else:
-                db.insert_into_seller(name, '', email, '', password, '', securityQuestion, answer)
+                db.insert_into_seller(name, '', email, '', password, 4, securityQuestion, answer)
                 print("Data inserted into Seller!")
+                return render_template("index.html")
 
 @app.route('/cart', methods=["GET", "POST"])
 def cart():
     if request.method == "GET":
-        return render_template("cart.html")
+        items = db.get_cart_items('sample@gmail.com')
+        return render_template("cart.html",products=None,total=0,charges=0)
     else:
-       print("hello from cart :)")
-       id=request.form.get('id')
-       data=db.get_product_by_id(id)
-       buyerId=db.get_buyer_id("mahdeed@gmail.com")
-       db.insert_into_cart(buyerId)
-       cart=db.get_cart_no(buyerId)
-       db.insert_into_cartItems(id, cart, 1)
-       print(data)
-       return render_template("cart.html",products=[{'id': id, 'name': data[0]["name"], 'price': data[0]["price"], 'quantity': "1", 'charges': data[0]["charges"] }])
+          print("hello from cart :)")
+          id=request.form.get('id')
+          data=db.get_product_by_id(id)
+          buyerId=db.get_buyer_id(session['email'])
+          db.insert_into_cart(buyerId)
+          print(session['email'])
+          cart=db.get_cart_no(buyerId)
+          db.insert_into_cartItems(id, cart, 1)
+          items=db.get_cart_items(session['email'])
+          print(data)
+          print(items)
+          total = 0
+          for x in items:
+              total = total + x['price']
+          charges = 0
+          for x in items:
+              charges = charges + x['charges']
+          print(total)
+          print(charges)
+          return render_template("cart.html", products=items, total=total, charges=charges)
 
 @app.route('/invoice', methods=["GET", "POST"])
 def invoice():
-    print("invoice")
-    products = db.get_cart_items("mahdeed@gmail.com")
-    account,buyer = db.get_buyer_data("mahdeed@gmail.com")
-    total=0
-    for x in products:
-        total = total+x[2]
-    db.insert_into_invoice(buyer[1],buyer[0],total)
-    print(total)
-    return(render_template("invoice.html",buyer=buyer, total=total))
+    if request.method == "GET":
+           items = db.get_cart_items(session['email'])
+           account,buyer = db.get_buyer_data(session['email'])
+           total=0
+           for x in items:
+               total = total+x['price']
+               total=total+x['charges']
+           db.insert_into_invoice(buyer[1],buyer[0],total)
+           print(total)
+           return(render_template("invoice.html",buyer=buyer, total=total))
 
 @app.route('/profile', methods=["GET", "POST"])
 def profile():
     if request.method == "GET":
-        account, data = db.get_buyer_data('mahad@kutta.com')
-        print(data)
-        if data == None:
-            account, data = db.get_seller_data('mahad@kutta.com')
-            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2], phone=data[4])
-        else:
-            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4])
+        return render_template("profile.html", user="none", username=" ", email=" ", address=" ", phone=" ")
     else:
         email = request.form.get(session['email'])
         address = request.form.get('address')
@@ -135,7 +146,7 @@ def profile():
 @app.route('/edit_product', methods=["GET", "POST"])
 def edit_product():
     if request.method == "GET":
-        return render_template("add_edit_product.html", name="shirt", type="men", warranty="2 years", price="123", charges="123")
+        return render_template("add_edit_product.html",title="Edit", name="shirt", type="men", warranty="2 years", price="123", charges="123")
     else:
         name = request.form.get('name')
         type = request.form.get('type')
@@ -146,27 +157,26 @@ def edit_product():
         id = db.get_seller_id(email)
         db.edit_product(name, price, warranty, type, charges, id)
         data=db.get_products_of_seller(email)
-        return render_template("add_edit_product.html", name="cocaine", type="men", warranty="2 years", price="123",
+        return render_template("add_edit_product.html",title="Edit", name="cocaine", type="men", warranty="2 years", price="123",
                                charges="1234")
 
-@app.route('/add_product')
+@app.route('/add_product',methods=["GET", "POST"])
 def add_product():
     if request.method == "GET":
         return render_template("add_edit_product.html", title="Add Product", name="Product Name", type="Type",
                                price="123", warranty="Years", charges="123")
-
     else:
         name = request.form.get('name')
         type = request.form.get('type')
         price = int(request.form.get('price'))
         warranty = int(request.form.get('warranty'))
         charges = int(request.form.get('charges'))
-        email = 'mahad@kutta.com'
+        email = session['email']
         id = db.get_seller_id(email)
         db.insert_into_product(name, price, warranty, type, charges, id)
-        data=db.get_products_of_seller(email)
-        return render_template("add_edit_product.html", name="cocaine", type="men", warranty="2 years", price="123",
-                               charges="1234")
+        data = db.get_products_of_seller(email)
+        return render_template("add_edit_product.html", name="product", type=" ", warranty=" ", price=" ",
+                               charges=" ",products=data)
 
 
 @app.route('/product')
