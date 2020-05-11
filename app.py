@@ -6,7 +6,7 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
-@app.route('/')
+@app.route('/home')
 def index():
     return render_template("index.html", products=db.get_4_products())
 
@@ -18,7 +18,7 @@ def logout():
     else:
         return render_template('index.html')
 
-@app.route('/login', methods=["GET", "POST"])
+@app.route('/', methods=["GET", "POST"])
 def signin():
     if request.method == "GET":
         return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Login", msg=None)
