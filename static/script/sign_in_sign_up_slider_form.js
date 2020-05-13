@@ -15,7 +15,7 @@ var signinForm = document.getElementById("sign-up-info");
 // Open the Sign Up page
 openSignUp = () =>{
   document.title = "Register";
-  //history.pushState({'title': 'Register'}, "Register", "register");
+  history.pushState({'title': 'Register'}, "Register", "register");
   // Remove classes so that animations can restart on the next 'switch'
   leftText.classList.remove("overlay-text-left-animation-out");
   overlay.classList.remove("open-sign-in");
@@ -41,7 +41,7 @@ openSignUp = () =>{
 // Open the Sign In page
 openSignIn = () =>{
   document.title = "Login";
-  //history.pushState({'title': 'Login'}, "Login", "");
+  history.pushState({'title': 'Login'}, "Login", "login");
   // Remove classes so that animations can restart on the next 'switch'
   leftText.classList.remove("overlay-text-left-animation");
   overlay.classList.remove("open-sign-up");
@@ -68,22 +68,22 @@ openSignIn = () =>{
 openSignInButton.addEventListener("click", openSignIn, false);
 openSignUpButton.addEventListener("click", openSignUp, false);
 
-// window.onpopstate = e => {
-//   const data = e.state;
-//   document.title = data.title;
-//   if(data.title == "Login")
-//   {
-//       if(document.getElementById("slide-right-button"))
-//       {
-//         document.getElementById("slide-right-button").click();
-//       }
-//   }
-//   else
-//   {
-//       if(document.getElementById("slide-left-button"))
-//       {
-//         document.getElementById("slide-left-button").click();
-//       }
-//   }
-// };
+window.onpopstate = e => {
+  const data = e.state;
+  document.title = data.title;
+  if(data.title == "Login")
+  {
+      if(document.getElementById("slide-right-button"))
+      {
+        document.getElementById("slide-right-button").click();
+      }
+  }
+  else
+  {
+      if(document.getElementById("slide-left-button"))
+      {
+        document.getElementById("slide-left-button").click();
+      }
+  }
+};
 

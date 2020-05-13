@@ -18,22 +18,26 @@
 <li id="product">
 <a href="{{ url_for('product') }}">Shop</a>
 </li>
+    {% if user_login %}
 <li id="cart">
 <a href="{{ url_for('cart') }}">Cart</a>
 </li>
+    {% endif %}
 <li id="about">
 <a href="{{ url_for('about') }}">About</a>
 </li>
 <li id="contact">
 <a href="{{ url_for('contact') }}">Contact</a>
 </li>
+{% if user_login %}
 <li id="invoice">
 <a href="{{ url_for('invoice') }}">Invoice</a>
 </li>
+{% endif %}
 </ul>
 </nav>
 </div>
-
+{% if user_login %}
 <div class="header-icons">
 <a href="{{ url_for('profile') }}" class="header-wrapicon1 dis-block">
 <img src="{{ url_for('static', filename='images/icons/icon-header-01.png') }}" class="header-icon1" alt="ICON">
@@ -152,6 +156,7 @@ $17.00
 </div>
 </div>
 </div>
+{% endif %}
 </div>
 </div>
 
@@ -172,6 +177,7 @@ $17.00
 <img src="{{ url_for('static', filename='images/icons/icon-header-02.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
 <span class="header-icons-noti">0</span>
 
+    {% if user_login %}
 <div class="header-cart header-dropdown">
 <ul class="header-cart-wrapitem">
 <li class="header-cart-item">
@@ -232,6 +238,7 @@ Check Out
 </div>
 </div>
 </div>
+    {% endif %}
 </div>
 </div>
 <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
@@ -247,20 +254,26 @@ Check Out
 <ul class="main-menu">
 <li class="item-menu-mobile">
 <a href="{{ url_for('index') }}">Home</a>
-<i class="arrow-main-menu fa fa-angle-right" aria-hidden="true"></i>
 </li>
 <li class="item-menu-mobile">
 <a href="{{ url_for('product') }}">Shop</a>
 </li>
+{% if user_login %}
 <li class="item-menu-mobile">
 <a href="{{ url_for('cart') }}">Features</a>
 </li>
+{% endif %}
 <li class="item-menu-mobile">
 <a href="{{ url_for('about') }}">About</a>
 </li>
 <li class="item-menu-mobile">
 <a href="{{ url_for('contact') }}">Contact</a>
 </li>
+    {% if user_login %}
+<li class="item-menu-mobile">
+<a href="{{ url_for('invoice') }}">Invoice</a>
+</li>
+    {% endif %}
 </ul>
 </nav>
 </div>

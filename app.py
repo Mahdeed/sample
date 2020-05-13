@@ -1,14 +1,16 @@
 import DBHandler as db
 from flask import Flask, render_template, request, session
+from flask_socketio import SocketIO, emit
 app = Flask(__name__)
 
+socketio = SocketIO(app)
 app.config['SECRET_KEY'] = 'secret!'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
-@app.route('/home')
+@app.route('/')
 def index():
-    return render_template("index.html", products=db.get_4_products())
+    return render_template("index.html", products=db.get_4_products(), user_login=False)
 
 @app.route('/logout', methods=["GET","POST"])
 def logout():
@@ -18,7 +20,7 @@ def logout():
     else:
         return render_template('index.html')
 
-@app.route('/', methods=["GET", "POST"])
+@app.route('/login', methods=["GET", "POST"])
 def signin():
     if request.method == "GET":
         return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Login", msg=None)
@@ -186,7 +188,7 @@ def add_product():
 
 @app.route('/product')
 def product():
-    return render_template("product.html", products=db.get_all_products())
+    return render_template("product.html", products=db.get_all_products(),user_login=False)
 
 
 
@@ -251,6 +253,14 @@ def filter():
 def faq():
     return render_template("faq.html")
 
+@app.route('/terms-conditions')
+def terms_conditions():
+    return render_template("terms_and_condition.html")
+
+@app.route('/privacy-agreement')
+def privacy_agreement():
+    return render_template("privacy.html")
+
 @app.route('/contact')
 def contact():
     return render_template("contact.html")
@@ -266,4 +276,4 @@ def search_product():
 
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)

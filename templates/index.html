@@ -148,6 +148,7 @@
 					<div class="block2 wrap-pic-w pos-relative m-b-30">
 						<img src="{{ url_for('static', filename='images/icons/bg-01.jpg') }}" alt="IMG">
 
+                        {% if not(user_login) %}
 						<div class="block2-content sizefull ab-t-l flex-col-c-m">
 							<h4 class="m-text4 t-center w-size3 p-b-8">
 								Sign up
@@ -164,6 +165,18 @@
 								</a>
 							</div>
 						</div>
+                            {% else %}
+                            <div class="block2-content sizefull ab-t-l flex-col-c-m">
+							<h4 class="m-text4 t-center w-size3 p-b-8">
+								Good to Here
+							</h4>
+
+							<p class="t-center w-size4">
+								Be the frist to know about the latest fashion news and get exclu-sive offers
+							</p>
+
+						</div>
+                        {% endif %}
 					</div>
 				</div>
 			</div>
@@ -189,14 +202,14 @@
                                 <!-- Block2 -->
                                 <div class="block2">
                                     <div class="block2-img wrap-pic-w of-hidden pos-relative">
-                                        <img src="{{ url_for('static', filename='images/item-0'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
+                                        <img src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
 
+                                        {% if user_login %}
                                         <div class="block2-overlay trans-0-4">
                                             <a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
                                                 <i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
                                                 <i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
                                             </a>
-
                                             <div class="block2-btn-addcart w-size1 trans-0-4">
                                                 <!-- Button -->
                                                 <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
@@ -204,10 +217,11 @@
                                                 </button>
                                             </div>
                                         </div>
+                                        {% endif %}
                                     </div>
 
                                     <div class="block2-txt p-t-20">
-                                        <a href="{{ url_for('product_detail',id='02') }}" class="block2-name dis-block s-text3 p-b-5">
+                                        <a href="{{ url_for('product_detail',id=product['id']) }}" class="block2-name dis-block s-text3 p-b-5">
                                             {{product['name']}}
                                         </a>
 
