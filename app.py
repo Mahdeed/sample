@@ -1,5 +1,6 @@
+from functools import wraps
 import DBHandler as db
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, flash,redirect,url_for
 from flask_socketio import SocketIO, emit
 app = Flask(__name__)
 
@@ -8,22 +9,42 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
+def is_user_login():
+    if 'logged_in' in session:
+        return True
+    return False
+
+def login_required(test):
+    @wraps(test)
+    def wrap(*args,**kwargs):
+        if 'logged_in' in session:
+            return test(*args,**kwargs)
+        else:
+            flash('You need to login first')
+            return redirect(url_for('signin'))
+    return wrap
+
 @app.route('/')
 def index():
-    return render_template("index.html", products=db.get_4_products(), user_login=False)
+    if is_user_login():
+        return render_template("index.html", products=db.get_4_products(), user_login=True)
+    else:
+        return render_template("index.html", products=db.get_4_products(), user_login=False)
 
 @app.route('/logout', methods=["GET","POST"])
 def logout():
     if request.method == "POST":
-        session.pop('email', None)
-        return render_template('index.html')
-    else:
-        return render_template('index.html')
+        session.pop('logged_in', None)
+        flash('You were logged out...!')
+        return render_template('index.html', products=db.get_4_products(), user_login=False)
 
 @app.route('/login', methods=["GET", "POST"])
 def signin():
     if request.method == "GET":
-        return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Login", msg=None)
+        if is_user_login():
+            return render_template("index.html", products=db.get_4_products(), user_login=True)
+        else:
+            return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Login", msg=None, user_login=False)
     else:
         print("Signin")
         errorMsg = ' '
@@ -38,16 +59,16 @@ def signin():
                 account, data = db.get_seller_data(email)
 
         if data is not None:
-            session['email'] = email
-            print(session['email'])
+            session['logged_in'] = True
+            print(session['logged_in'])
             print(data)
             user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
             # user will have data extracted from db for the buyer or the seller
             return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
-                                   address=user["address"], phone=user["phone"])
+                                   address=user["address"], phone=user["phone"], user_login=True)
         else:
             errorMsg = 'Invalid email/password!!'
-            return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg)
+            return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg, user_login=False)
 
 @app.route('/register', methods=["GET", "POST"])
 def signup():
@@ -87,10 +108,11 @@ def signup():
                 return render_template("index.html")
 
 @app.route('/cart', methods=["GET", "POST"])
+@login_required
 def cart():
     if request.method == "GET":
         items = db.get_cart_items(session['email'])
-        return render_template("cart.html",products=None,total=0,charges=0)
+        return render_template("cart.html",products=None,total=0,charges=0, user_login=True)
     else:
           print("hello from cart :)")
           id=request.form.get('id')
@@ -111,9 +133,10 @@ def cart():
               charges = charges + x['charges']
           print(total)
           print(charges)
-          return render_template("cart.html", products=items, total=total, charges=charges)
+          return render_template("cart.html", products=items, total=total, charges=charges, user_login=True)
 
 @app.route('/invoice', methods=["GET", "POST"])
+@login_required
 def invoice():
     if request.method == "GET":
            items = db.get_cart_items(session['email'])
@@ -124,16 +147,17 @@ def invoice():
                total=total+x['charges']
            db.insert_into_invoice(buyer[1],buyer[0],total)
            print(total)
-           return(render_template("invoice.html",buyer=buyer, total=total))
+           return render_template("invoice.html",buyer=buyer, total=total, user_login=True)
 
 @app.route('/profile', methods=["GET", "POST"])
+@login_required
 def profile():
     if request.method == "GET":
         account,data = db.get_buyer_data(session['email'])
         if data == None:
             account, data = db.get_seller_data(session['email'])
         return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2],
-                               phone=data[4])
+                               phone=data[4], user_login=True)
     else:
         email = request.form.get(session['email'])
         address = request.form.get('address')
@@ -144,16 +168,17 @@ def profile():
             account, data = db.get_seller_data(session['email'])
             db.insert_into_seller_address_and_phoneN(session['email'], address, phoneNumber)
             data = db.get_seller_data(session['email'])
-            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2], phone=data[4])
+            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2], phone=data[4], user_login=True)
         else:
             db.insert_into_buyer_address_and_phoneN(session['email'], address, phoneNumber)
             db.get_buyer_data(session['email'])
-            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4])
+            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4], user_login=True)
 
 @app.route('/edit_product', methods=["GET", "POST"])
+@login_required
 def edit_product():
     if request.method == "GET":
-        return render_template("add_edit_product.html",title="Edit", name="shirt", type="men", warranty="2 years", price="123", charges="123")
+        return render_template("add_edit_product.html",title="Edit", name="shirt", type="men", warranty="2 years", price="123", charges="123", user_login=True)
     else:
         name = request.form.get('name')
         type = request.form.get('type')
@@ -165,13 +190,14 @@ def edit_product():
         db.edit_product(name, price, warranty, type, charges, id)
         data=db.get_products_of_seller(email)
         return render_template("add_edit_product.html",title="Edit", name="cocaine", type="men", warranty="2 years", price="123",
-                               charges="1234")
+                               charges="1234", user_login=True)
 
 @app.route('/add_product',methods=["GET", "POST"])
+@login_required
 def add_product():
     if request.method == "GET":
         return render_template("add_edit_product.html", title="Add Product", name="Product Name", type="Type",
-                               price="123", warranty="Years", charges="123")
+                               price="123", warranty="Years", charges="123", user_login=True)
     else:
         name = request.form.get('name')
         type = request.form.get('type')
@@ -183,12 +209,15 @@ def add_product():
         db.insert_into_product(name, price, warranty, type, charges, id)
         data = db.get_products_of_seller(email)
         return render_template("add_edit_product.html", name="product", type=" ", warranty=" ", price=" ",
-                               charges=" ",products=data)
+                               charges=" ",products=data, user_login=True)
 
 
 @app.route('/product')
 def product():
-    return render_template("product.html", products=db.get_all_products(),user_login=False)
+    if is_user_login():
+        return render_template("product.html", products=db.get_all_products(), user_login=True)
+    else:
+        return render_template("product.html", products=db.get_all_products(),user_login=False)
 
 
 
@@ -197,13 +226,13 @@ def forget_password():
     if request.method == "POST":
         session['email'] = request.form.get('email')
         if db.isEmailExists_in_buyer(session['email']):
-            return render_template("security.html")
+            return render_template("security.html",user_login=False)
         elif db.isEmailExists_in_seller(session['email']):
-            return render_template("security.html")
+            return render_template("security.html",user_login=False)
         else:
-            return render_template("forget.html")
+            return render_template("forget.html",user_login=False)
 
-    return render_template("forget.html")
+    return render_template("forget.html",user_login=False)
 
 @app.route('/security_question', methods=["POST", "GET"])
 def security_question():
@@ -211,9 +240,9 @@ def security_question():
         securityQuestion = request.form.get('securityQuestion')
         answer = request.form.get('answer')
         if db.is_security_question_and_answer_correct(session['email'], securityQuestion, answer):
-            return render_template("reset.html", email=session['email'])
+            return render_template("reset.html", email=session['email'],user_login=False)
     else:
-        return render_template("security.html")
+        return render_template("security.html",user_login=False)
 
 @app.route('/reset_password', methods=["GET", "POST"])
 def reset_password():
@@ -221,22 +250,21 @@ def reset_password():
         password = request.form.get('password')
         if db.isEmailExists_in_buyer(session['email']):
             db.insert_password_in_buyer(session['email'], password)
-            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg='')
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg='',user_login=False)
         else:
             db.insert_password_in_seller(session['email'], password)
-            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg='')
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg='',user_login=False)
     else:
-        return render_template("reset.html", email=session['email'])
+        return render_template("reset.html", email=session['email'],user_login=False)
 
 @app.route('/product/<int:id>')
+@login_required
 def product_detail(id):
-    return render_template("product-detail.html")
+    return render_template("product-detail.html",user_login=True)
 
-@app.route('/product/search')
-def search():
-    pass
 
 @app.route('/product/filter', methods=["GET", "POST"])
+@login_required
 def filter():
     if request.method == "POST":
         list_category = request.form.getlist('category')
@@ -248,31 +276,57 @@ def filter():
 
         return render_template("product.html")
 
-############### Static Pages ################################
-@app.route('/faq')
-def faq():
-    return render_template("faq.html")
-
-@app.route('/terms-conditions')
-def terms_conditions():
-    return render_template("terms_and_condition.html")
-
-@app.route('/privacy-agreement')
-def privacy_agreement():
-    return render_template("privacy.html")
-
-@app.route('/contact')
-def contact():
-    return render_template("contact.html")
-
-@app.route('/about')
-def about():
-    return render_template("about.html")
 @app.route('/product/search', methods=["POST"])
 def search_product():
     name = request.form.get('search-product')
     data = db.get_product_by_name(name)
     return render_template("product.html", products=data)
+
+@socketio.on('connect')
+def connect():
+    print("Socket connected")
+    emit('connetion',"Done",request.sid)
+
+@socketio.on('event')
+def event(data):
+    print(request.sid)
+    print(data['name'])
+
+############### Static Pages ################################
+@app.route('/faq')
+def faq():
+    if is_user_login():
+        return render_template("faq.html",user_login=True)
+    else:
+        return render_template("faq.html", user_login=False)
+
+@app.route('/terms-conditions')
+def terms_conditions():
+    if is_user_login():
+        return render_template("terms_and_condition.html",user_login=True)
+    else:
+        return render_template("terms_and_condition.html", user_login=False)
+
+@app.route('/privacy-agreement')
+def privacy_agreement():
+    if is_user_login():
+        return render_template("privacy.html",user_login=True)
+    else:
+        return render_template("privacy.html", user_login=False)
+
+@app.route('/contact')
+def contact():
+    if is_user_login():
+        return render_template("contact.html",user_login=True)
+    else:
+        return render_template("contact.html", user_login=False)
+
+@app.route('/about')
+def about():
+    if is_user_login():
+        return render_template("about.html",user_login=True)
+    else:
+        return render_template("about.html", user_login=False)
 
 
 if __name__ == '__main__':

@@ -203,9 +203,8 @@
                                 <div class="block2">
                                     <div class="block2-img wrap-pic-w of-hidden pos-relative">
                                         <img src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
-
-                                        {% if user_login %}
                                         <div class="block2-overlay trans-0-4">
+                                            {% if user_login %}
                                             <a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
                                                 <i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
                                                 <i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
@@ -216,8 +215,8 @@
                                                     Add to Cart
                                                 </button>
                                             </div>
+                                            {% endif %}
                                         </div>
-                                        {% endif %}
                                     </div>
 
                                     <div class="block2-txt p-t-20">

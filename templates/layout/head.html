@@ -156,6 +156,10 @@ $17.00
 </div>
 </div>
 </div>
+    {% else %}
+    <div class="header-icons">
+<a href="{{ url_for('signin') }}">Login</a>
+</div>
 {% endif %}
 </div>
 </div>
