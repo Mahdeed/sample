@@ -173,6 +173,7 @@ $17.00
 <div class="btn-show-menu">
 
 <div class="header-icons-mobile">
+{% if user_login %}
 <a href="{{ url_for('profile') }}" class="header-wrapicon1 dis-block">
 <img src="{{ url_for('static', filename='images/icons/icon-header-01.png') }}" class="header-icon1" alt="ICON">
 </a>
@@ -181,7 +182,6 @@ $17.00
 <img src="{{ url_for('static', filename='images/icons/icon-header-02.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
 <span class="header-icons-noti">0</span>
 
-    {% if user_login %}
 <div class="header-cart header-dropdown">
 <ul class="header-cart-wrapitem">
 <li class="header-cart-item">
@@ -242,8 +242,11 @@ Check Out
 </div>
 </div>
 </div>
-    {% endif %}
+
 </div>
+    {% else %}
+    <a href="{{ url_for('signin') }}">Login</a>
+    {% endif %}
 </div>
 <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
 <span class="hamburger-box">

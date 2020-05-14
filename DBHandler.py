@@ -439,7 +439,7 @@ def get_4_products():
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT id, name, price FROM product LIMIT 4'
+        query = 'SELECT id, name, price FROM product LIMIT 6'
         cur.execute(query)
         data = cur.fetchall()
         if (len)(data) < 1:
@@ -647,9 +647,9 @@ def isPasswordCorrect_in_seller(email, password):
 
 
 
-# FUNCTION to check if security question and both answer are correct#
-def is_security_question_and_answer_correct(email, securityQuestion, answer):
-    print('is_security_question_and_answer_correct(securityQuestion, answer)')
+# FUNCTION to check if security question and both answer are correct in buyer table#
+def is_security_question_and_answer_correct_in_buyer(email, securityQuestion, answer):
+    print('is_security_question_and_answer_correct(securityQuestion, answer in buyer)')
     try:
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         print("DATABASE IS CONNECTED")
@@ -669,6 +669,27 @@ def is_security_question_and_answer_correct(email, securityQuestion, answer):
         if db != None:
             db.close()
 
+# FUNCTION to check if security question and both answer are correct in seller table#
+def is_security_question_and_answer_correct_in_seller(email, securityQuestion, answer):
+    print('is_security_question_and_answer_correct(securityQuestion, answer in seller)')
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        print("DATABASE IS CONNECTED")
+        cursor = db.cursor()
+        query = "SELECT securityQuestion, answer FROM seller WHERE email = %s"
+        args = (email)
+        cursor.execute(query, args)
+        securityQuestion_answer = cursor.fetchone()
+        print(securityQuestion_answer)
+        if securityQuestion_answer[0] == securityQuestion and securityQuestion_answer[1] == answer:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print("ERRORRRR DB not connected in get password for seller")
+    finally:
+        if db != None:
+            db.close()
 
 ## FUNCTIONS TO CHECKS EMAILS AND STUFF EENNNDDDD Heeerrreeee #######
 #################################################################################################################################

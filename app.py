@@ -32,17 +32,19 @@ def index():
         return render_template("index.html", products=db.get_4_products(), user_login=False)
 
 @app.route('/logout', methods=["GET","POST"])
+@login_required
 def logout():
     if request.method == "POST":
         session.pop('logged_in', None)
+        session.pop('email', None)
         flash('You were logged out...!')
-        return render_template('index.html', products=db.get_4_products(), user_login=False)
+        return redirect(url_for('index'))
 
 @app.route('/login', methods=["GET", "POST"])
 def signin():
     if request.method == "GET":
         if is_user_login():
-            return render_template("index.html", products=db.get_4_products(), user_login=True)
+            return redirect(url_for('index'))
         else:
             return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Login", msg=None, user_login=False)
     else:
@@ -60,12 +62,13 @@ def signin():
 
         if data is not None:
             session['logged_in'] = True
-            print(session['logged_in'])
+            session['email'] = email
+            print(session['email'])
             print(data)
             user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
             # user will have data extracted from db for the buyer or the seller
-            return render_template("profile.html", user=user["account"], username=user["name"], email=user["email"],
-                                   address=user["address"], phone=user["phone"], user_login=True)
+            return redirect(url_for('profile', user=user["account"], username=user["name"], email=user["email"],
+                                   address=user["address"], phone=user["phone"], user_login=True))
         else:
             errorMsg = 'Invalid email/password!!'
             return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg, user_login=False)
@@ -73,7 +76,10 @@ def signin():
 @app.route('/register', methods=["GET", "POST"])
 def signup():
     if request.method == "GET":
-        return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Register", msg=None)
+        if is_user_login():
+            return redirect(url_for('index'))
+        else:
+            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Register", msg=None, user_login=False)
     else:
         name = request.form.get("name")
         email = request.form.get("email")
@@ -92,27 +98,35 @@ def signup():
             if db.isEmailExists_in_buyer(email):
                 msg = 'Email already exists!!'
                 print("data not inserted in buyer!")
-                return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+                return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Register", msg=msg, user_login=False)
             else:
                 print("data inserted!!")
                 db.insert_into_Buyer(name, password, email, ' ', ' ', securityQuestion, answer)
-                return render_template("index.html")
+                return redirect(url_for('signin'))
         else:
             if db.isEmailExists_in_seller(email):
                 msg = 'Email already exists in seller!'
                 print('DATA NOT INSERTED IN SELLER!')
-                return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg)
+                return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg=msg, user_login=False)
             else:
                 db.insert_into_seller(name, '', email, '', password, 4, securityQuestion, answer)
                 print("Data inserted into Seller!")
-                return render_template("index.html")
+                return redirect(url_for('signin'))
 
 @app.route('/cart', methods=["GET", "POST"])
 @login_required
 def cart():
     if request.method == "GET":
         items = db.get_cart_items(session['email'])
-        return render_template("cart.html",products=None,total=0,charges=0, user_login=True)
+        total = 0
+        for x in items:
+            total = total + x['price']
+        charges = 0
+        for x in items:
+            charges = charges + x['charges']
+        print(total)
+        print(charges)
+        return render_template("cart.html",products=items,total=total,charges=charges, user_login=True)
     else:
           print("hello from cart :)")
           id=request.form.get('id')
@@ -211,7 +225,6 @@ def add_product():
         return render_template("add_edit_product.html", name="product", type=" ", warranty=" ", price=" ",
                                charges=" ",products=data, user_login=True)
 
-
 @app.route('/product')
 def product():
     if is_user_login():
@@ -219,30 +232,46 @@ def product():
     else:
         return render_template("product.html", products=db.get_all_products(),user_login=False)
 
-
-
 @app.route('/forget_password', methods=["GET", "POST"])
 def forget_password():
     if request.method == "POST":
-        session['email'] = request.form.get('email')
-        if db.isEmailExists_in_buyer(session['email']):
-            return render_template("security.html",user_login=False)
-        elif db.isEmailExists_in_seller(session['email']):
-            return render_template("security.html",user_login=False)
+        if db.isEmailExists_in_buyer(request.form.get('email')):
+            session['email'] = request.form.get('email')
+            session['forget'] = True
+            return redirect(url_for("security_question"))
+        elif db.isEmailExists_in_seller(request.form.get('email')):
+            session['email'] = request.form.get('email')
+            session['forget'] = True
+            return redirect(url_for("security_question"))
         else:
-            return render_template("forget.html",user_login=False)
+            return render_template("forget.html", user_login=False)
 
-    return render_template("forget.html",user_login=False)
+    if is_user_login():
+        return redirect(url_for('index'))
+    else:
+        return render_template("forget.html", user_login=False)
 
 @app.route('/security_question', methods=["POST", "GET"])
 def security_question():
     if request.method == "POST":
         securityQuestion = request.form.get('securityQuestion')
         answer = request.form.get('answer')
-        if db.is_security_question_and_answer_correct(session['email'], securityQuestion, answer):
-            return render_template("reset.html", email=session['email'],user_login=False)
+        if db.is_security_question_and_answer_correct_in_buyer(session['email'], securityQuestion, answer):
+            session.pop('forget',None)
+            session['security'] = True
+            return redirect(url_for("reset_password", email=session['email']))
+        elif db.is_security_question_and_answer_correct_in_seller(session['email'], securityQuestion, answer):
+            session.pop('forget', None)
+            session['security'] = True
+            return redirect(url_for("reset_password", email=session['email']))
     else:
-        return render_template("security.html",user_login=False)
+        if is_user_login():
+            return redirect(url_for('index'))
+        else:
+            if 'forget' in session:
+                return render_template("security.html",user_login=False)
+            else:
+                return redirect(url_for('signin'))
 
 @app.route('/reset_password', methods=["GET", "POST"])
 def reset_password():
@@ -250,18 +279,25 @@ def reset_password():
         password = request.form.get('password')
         if db.isEmailExists_in_buyer(session['email']):
             db.insert_password_in_buyer(session['email'], password)
-            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg='',user_login=False)
+            session.pop('security', None)
+            return redirect(url_for('signup'))
         else:
             db.insert_password_in_seller(session['email'], password)
-            return render_template("sign_in_sign_up_slider_form.html", signin=False, title="Sign Up", msg='',user_login=False)
+            session.pop('security', None)
+            return redirect(url_for('signup'))
     else:
-        return render_template("reset.html", email=session['email'],user_login=False)
+        if is_user_login():
+            return redirect(url_for('index'))
+        else:
+            if 'security' in session:
+                return render_template("reset.html", email=session['email'],user_login=False)
+            else:
+                return redirect(url_for('signin'))
 
 @app.route('/product/<int:id>')
 @login_required
 def product_detail(id):
     return render_template("product-detail.html",user_login=True)
-
 
 @app.route('/product/filter', methods=["GET", "POST"])
 @login_required
@@ -274,13 +310,17 @@ def filter():
         if lower_price and higher_price is not None:
             print(db.get_products_in_range(int(lower_price), int(higher_price)))
 
-        return render_template("product.html")
+        return render_template("product.html",user_login=True)
 
-@app.route('/product/search', methods=["POST"])
+@app.route('/product/search', methods=["GET", "POST"])
+@login_required
 def search_product():
-    name = request.form.get('search-product')
-    data = db.get_product_by_name(name)
-    return render_template("product.html", products=data)
+    if request.method == "POST":
+        name = request.form.get('search-product')
+        data = db.get_product_by_name(name)
+        return render_template("product.html", products=data,user_login=True)
+    else:
+        return redirect(url_for('product'))
 
 @socketio.on('connect')
 def connect():
@@ -300,14 +340,14 @@ def faq():
     else:
         return render_template("faq.html", user_login=False)
 
-@app.route('/terms-conditions')
+@app.route('/terms_conditions')
 def terms_conditions():
     if is_user_login():
         return render_template("terms_and_condition.html",user_login=True)
     else:
         return render_template("terms_and_condition.html", user_login=False)
 
-@app.route('/privacy-agreement')
+@app.route('/privacy_agreement')
 def privacy_agreement():
     if is_user_login():
         return render_template("privacy.html",user_login=True)
@@ -327,7 +367,6 @@ def about():
         return render_template("about.html",user_login=True)
     else:
         return render_template("about.html", user_login=False)
-
 
 if __name__ == '__main__':
     socketio.run(app)
