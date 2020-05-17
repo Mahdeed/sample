@@ -72,23 +72,6 @@ def insert_into_buyer_address_and_phoneN(email ,address, phoneNumber):
         db.commit()
         db.close()
 
-
-# Function to insert info into the 'cart' table
-def insert_into_cart(buyerId):
-    try:
-        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
-        cur = db.cursor()
-        print('DATABASE for cart function connected')
-        query = 'INSERT INTO cart (buyerId) VALUES (%s)'
-        args = (buyerId)
-        cur.execute(query, args)
-        print('Record inserted into the table \'cart\' ')
-    except Exception as e:
-        print(str(e))
-    finally:
-        db.commit()
-        db.close()
-
 # Function to insert info into the 'invoice' table
 def insert_into_invoice(name, customerId, totalCost):
     try:
@@ -140,15 +123,57 @@ def insert_into_product(name, price, warranty, type, deliveryCharges, seller):
         db.close()
 
 #Function to insert info into 'cart' table #
-def insert_into_cartItems(productId, cartNo, quantity):
+def insert_into_cart(buyerId, productId, quantity):
+    try:
+        cartNo = get_cart_no(buyerId)
+        if cartNo == None:
+            db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+            cursor = db.cursor()
+            print("DATABASE IS CONNECTED")
+            query = "INSERT INTO cart(buyerId) VALUES(%s) "
+            args = buyerId
+            cursor.execute(query, args)
+        else:
+            db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
+            cursor = db.cursor()
+            print("DATABASE IS CONNECTED")
+            if get_product_quantity_in_cart(cartNo, productId) != None:
+                increase_product_quantity_in_cart(cartNo, productId)
+            else:
+                query = "INSERT INTO cartItems(cartNo, productId, quantity) VALUES(%s,%s,%s) "
+                args = (cartNo, productId, quantity)
+                cursor.execute(query, args)
+                print("Record inserted into the table 'cartItems' ")
+    except Exception as e:
+        print("Error DB could not be connected")
+    finally:
+        db.commit()
+        db.close()
+
+#Function to insert into wish_list
+def insert_into_wish_list(buyerId, productId):
     try:
         db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
         cursor = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = "INSERT INTO cartItems(cartNo, productId, quantity) VALUES(%s,%s,%s) "
-        args = (cartNo, productId, quantity)
+        query = "Insert into wish_list(buyerId, productId) VALUES(%s,%s)"
+        args = (buyerId, productId)
         cursor.execute(query, args)
-        print("Record inserted into the table 'cartItems' ")
+    except Exception as e:
+        print("Error DB could not be connected")
+    finally:
+        db.commit()
+        db.close()
+
+#function to increase product quantity
+def increase_product_quantity_in_cart(cartNo, productId):
+    try:
+        db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
+        cursor = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = "UPDATE cartitems SET quantity = quantity+1 where cartNo=%s and productId=%s"
+        args = (cartNo, productId)
+        cursor.execute(query, args)
     except Exception as e:
         print("Error DB could not be connected")
     finally:
@@ -240,6 +265,40 @@ def insert_into_seller_address_and_phoneN(email ,address, phoneNumber):
 #### FUNCTIONS TO GETT USEERRRR DATA STARTTT HEREEE ######
 #################################################################################################################################
 
+#Function to remove roduct from cart
+def remove_from_cart(buyerId, productId):
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        cartNo=get_cart_no(buyerId)
+        print("DATABASE IS CONNECTED")
+        query = 'DELETE FROM cartitems where cartNo=%s and productId=%s'
+        args = (cartNo,productId)
+        cur.execute(query, args)
+        print("Removed product from 'cartitems' ")
+    except Exception as e:
+        print("Error DB could not be connected")
+    finally:
+        db.commit()
+        db.close()
+
+#Function to remove from Wishlist
+def remove_from_wishlist(buyerId, productId):
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        cartNo=get_cart_no(buyerId)
+        print("DATABASE IS CONNECTED")
+        query = 'DELETE FROM wish_list where buyerId=%s and productId=%s'
+        args = (buyerId,productId)
+        cur.execute(query, args)
+        print("Removed product from 'wish_list' ")
+    except Exception as e:
+        print("Error DB could not be connected")
+    finally:
+        db.commit()
+        db.close()
+
 #Function to get data from the table 'buyer'
 def get_buyer_data(email):
     print('get_buyer_data()')
@@ -279,6 +338,24 @@ def get_seller_id(email):
         db.close()
         return id
 
+#function to get product quantity from cart
+def get_product_quantity_in_cart(cartNo, productId):
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'SELECT quantity FROM cartitems where cartNo = %s and productId = %s'
+        args = (cartNo, productId)
+        cur.execute(query, args)
+        quantity = cur.fetchone()
+        if (len)(quantity) < 1:
+            quantity = None
+        print("quantity obtained from the table 'cartItems' ")
+    except Exception as e:
+        print("Error DB could not be connected")
+    finally:
+        db.close()
+        return id
 #Function to get buyer id from table 'buyer'
 def get_buyer_id(email):
     try:
@@ -304,8 +381,9 @@ def get_wishlist(email):
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges FROM wish_list w, buyer b, product p  where b.email = %s AND w.id=b.wish_list'
-        args = email
+        buyerId=get_buyer_id(email)
+        query = 'SELECT p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges FROM wish_list w, product p  where w.buyerId = %s AND p.id=w.productId'
+        args = buyerId
         cur.execute(query, args)
         wish_list = cur.fetchall()
         if (len)(wish_list) < 1:
