@@ -385,17 +385,20 @@ def get_wishlist(email):
         query = 'SELECT p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges FROM wish_list w, product p  where w.buyerId = %s AND p.id=w.productId'
         args = buyerId
         cur.execute(query, args)
-        wish_list = cur.fetchall()
-        if (len)(wish_list) < 1:
-            wish_list = None
-        print(wish_list)
+        list = []
+        products = cur.fetchall()
+        if (len)(products) < 1:
+            products = None
+        for p in products:
+            list.append({'name': str(p[0]), 'price': p[1], 'rating': p[2], 'warranty': p[4], 'type': p[3], 'deliveryCharges':p[5]})
+        print(list)
         print("Record obtained from the table 'wish_list'  ")
     except Exception as e:
         print("Error DB could not be connected in getting data from wish_list table")
     finally:
         db.commit()
         db.close()
-        return wish_list
+        return list
 
 #Function to get cartNo from 'buyer id'
 def get_cart_no(buyerId):
