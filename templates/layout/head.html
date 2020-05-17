@@ -18,22 +18,20 @@
 <li id="product">
 <a href="{{ url_for('product') }}">Shop</a>
 </li>
-    {% if user_login %}
+{% if user_login %}
 <li id="cart">
 <a href="{{ url_for('cart') }}">Cart</a>
 </li>
-    {% endif %}
+<li id="invoice">
+<a href="{{ url_for('invoice') }}">Invoice</a>
+</li>
+{% endif %}
 <li id="about">
 <a href="{{ url_for('about') }}">About</a>
 </li>
 <li id="contact">
 <a href="{{ url_for('contact') }}">Contact</a>
 </li>
-{% if user_login %}
-<li id="invoice">
-<a href="{{ url_for('invoice') }}">Invoice</a>
-</li>
-{% endif %}
 </ul>
 </nav>
 </div>
@@ -44,115 +42,15 @@
 </a>
 <span class="linedivide1"></span>
 <div class="header-wrapicon2">
-<img src="{{ url_for('static', filename='images/icons/icon-header-02.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
-<span class="header-icons-noti">0</span>
+<img onclick="viewCartItem();" src="{{ url_for('static', filename='images/icons/icon-header-02.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
 
-<div class="header-cart header-dropdown">
-<ul class="header-cart-wrapitem">
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-01.jpg') }}" alt="IMG">
-</div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-White Shirt With Pleat Detail Back
-</a>
-<span class="header-cart-item-info">
-1 x $19.00
-</span>
-</div>
-</li>
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-02.jpg') }}" alt="IMG">
-</div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-Converse All Star Hi Black Canvas
-</a>
-<span class="header-cart-item-info">
-1 x $39.00
-</span>
-</div>
-</li>
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-03.jpg') }}" alt="IMG">
-</div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-Nixon Porter Leather Watch In Tan
-</a>
-<span class="header-cart-item-info">
-1 x $17.00
-</span>
-</div>
-</li>
-</ul>
-<div class="header-cart-total">
-Total: $75.00
-</div>
-<div class="header-cart-buttons">
-<div class="header-cart-wrapbtn">
+<div id="header_cart" class="header-cart header-dropdown">
 
-<a href="{{ url_for('cart') }}" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-View Cart
-</a>
-</div>
-<div class="header-cart-wrapbtn">
-
-<a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-Check Out
-</a>
-</div>
-</div>
 </div>
 </div>
 <div style="margin-left: 30px" class="header-wrapicon2">
-<img src="{{ url_for('static', filename='images/icons/wishlist-icon-png-1.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
-
-<div class="header-cart header-dropdown">
-<ul class="header-cart-wrapitem">
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-01.jpg') }}" alt="IMG">
-</div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-White Shirt With Pleat Detail Back
-</a>
-<span class="header-cart-item-info">
-$19.00
-</span>
-</div>
-</li>
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-02.jpg') }}" alt="IMG">
-</div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-Converse All Star Hi Black Canvas
-</a>
-<span class="header-cart-item-info">
-$39.00
-</span>
-</div>
-</li>
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-03.jpg') }}" alt="IMG">
-</div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-Nixon Porter Leather Watch In Tan
-</a>
-<span class="header-cart-item-info">
-$17.00
-</span>
-</div>
-</li>
-</ul>
+<img onclick="wishlistItem();" src="{{ url_for('static', filename='images/icons/wishlist-icon-png-1.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
+<div id="wishlistItem" class="header-cart header-dropdown">
 </div>
 </div>
 </div>
@@ -179,68 +77,16 @@ $17.00
 </a>
 <span class="linedivide2"></span>
 <div class="header-wrapicon2">
-<img src="{{ url_for('static', filename='images/icons/icon-header-02.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
-<span class="header-icons-noti">0</span>
+<img onclick="viewCartItem(1);" src="{{ url_for('static', filename='images/icons/icon-header-02.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
+<div id="mobile_header_cart" class="header-cart header-dropdown">
 
-<div class="header-cart header-dropdown">
-<ul class="header-cart-wrapitem">
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-01.jpg') }}" alt="IMG">
 </div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-White Shirt With Pleat Detail Back
-</a>
-<span class="header-cart-item-info">
-1 x $19.00
-</span>
-</div>
-</li>
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-02.jpg') }}" alt="IMG">
-</div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-Converse All Star Hi Black Canvas
-</a>
-<span class="header-cart-item-info">
-1 x $39.00
-</span>
-</div>
-</li>
-<li class="header-cart-item">
-<div class="header-cart-item-img">
-<img src="{{ url_for('static', filename='images/item-cart-03.jpg') }}" alt="IMG">
-</div>
-<div class="header-cart-item-txt">
-<a href="#" class="header-cart-item-name">
-Nixon Porter Leather Watch In Tan
-</a>
-<span class="header-cart-item-info">
-1 x $17.00
-</span>
-</div>
-</li>
-</ul>
-<div class="header-cart-total">
-Total: $75.00
-</div>
-<div class="header-cart-buttons">
-<div class="header-cart-wrapbtn">
 
-<a href="{{ url_for('cart') }}" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-View Cart
-</a>
 </div>
-<div class="header-cart-wrapbtn">
+<div class="header-wrapicon2">
+<img onclick="wishlistItem(1);" style="margin-left: 20px" src="{{ url_for('static', filename='images/icons/wishlist-icon-png-1.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
+<div id="mobile_header_wishlist" class="header-cart header-dropdown">
 
-<a href="#" class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-Check Out
-</a>
-</div>
-</div>
 </div>
 
 </div>
@@ -267,7 +113,10 @@ Check Out
 </li>
 {% if user_login %}
 <li class="item-menu-mobile">
-<a href="{{ url_for('cart') }}">Features</a>
+<a href="{{ url_for('cart') }}">Cart</a>
+</li>
+<li class="item-menu-mobile">
+<a href="{{ url_for('invoice') }}">Invoice</a>
 </li>
 {% endif %}
 <li class="item-menu-mobile">
@@ -276,11 +125,6 @@ Check Out
 <li class="item-menu-mobile">
 <a href="{{ url_for('contact') }}">Contact</a>
 </li>
-    {% if user_login %}
-<li class="item-menu-mobile">
-<a href="{{ url_for('invoice') }}">Invoice</a>
-</li>
-    {% endif %}
 </ul>
 </nav>
 </div>

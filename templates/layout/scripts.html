@@ -26,5 +26,36 @@
 
     <script src="{{ url_for('static', filename='socket/socket.io.js') }}" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='socket/socket.js') }}"></script>
-
+<script>
+    function add_to_cart(id) {
+        socket.emit('add_to_cart',{'check':"add_to_cart...!",'id':id});
+    }
+    function remove_to_cart(id,element) {
+        document.getElementById('header_cart_'+String(element)).remove();
+        socket.emit('remove_from_cart',{'check':"removeProductFromCarts...!",'id':id});
+    }
+    function add_to_wishlist(id,elemnt) {
+        if(String(elemnt.getAttribute('class'))=="hov-pointer trans-0-4 block2-btn-towishlist")
+        {
+            elemnt.setAttribute('class','block2-btn-addwishlist hov-pointer trans-0-4');
+            socket.emit('remove_from_wishlist',{'check':"add_to_wishlist_remove_from_wishlist...!",'id':id});
+        }
+        else
+        {
+            elemnt.setAttribute('class','hov-pointer trans-0-4 block2-btn-towishlist');
+            socket.emit('add_to_wishlist',{'check':"add_to_wishlist...!",'id':id});
+        }
+    }
+    function remove_from_wishlist(id,element) {
+        document.getElementById('header_wishlist_'+String(element)).remove();
+        socket.emit('remove_from_wishlist',{'check':"remove_from_wishlist...!",'id':id});
+    }
+    function viewCartItem(flag=0)
+    {
+            socket.emit('viewCartItem',{'check':"viewCartItem...!",'flag':flag});
+    }
+    function wishlistItem(flag=0) {
+        socket.emit('wishlistItem',{'check':"wishlistItem...!",'flag':flag});
+    }
+    </script>
 {% endblock %}

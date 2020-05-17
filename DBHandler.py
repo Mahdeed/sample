@@ -117,7 +117,7 @@ def insert_into_product(name, price, warranty, type, deliveryCharges, seller):
         cursor.execute(query, args)
         print("Record inserted into the table 'product' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.commit()
         db.close()
@@ -145,7 +145,7 @@ def insert_into_cart(buyerId, productId, quantity):
                 cursor.execute(query, args)
                 print("Record inserted into the table 'cartItems' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.commit()
         db.close()
@@ -157,10 +157,10 @@ def insert_into_wish_list(buyerId, productId):
         cursor = db.cursor()
         print("DATABASE IS CONNECTED")
         query = "Insert into wish_list(buyerId, productId) VALUES(%s,%s)"
-        args = (buyerId, productId)
+        args = (str(buyerId), str(productId))
         cursor.execute(query, args)
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.commit()
         db.close()
@@ -175,7 +175,7 @@ def increase_product_quantity_in_cart(cartNo, productId):
         args = (cartNo, productId)
         cursor.execute(query, args)
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.commit()
         db.close()
@@ -191,7 +191,7 @@ def edit_product(name, price, warranty, type, deliveryCharges, seller):
         cursor.execute(query, args)
         print("Record updated in the table 'product' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.commit()
         db.close()
@@ -210,7 +210,7 @@ def insert_into_seller(name, address, email, phoneNumber, password, ranking, sec
             cursor.execute(query, args)
             print("Record inserted into the table 'seller' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.commit()
         db.close()
@@ -277,7 +277,7 @@ def remove_from_cart(buyerId, productId):
         cur.execute(query, args)
         print("Removed product from 'cartitems' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.commit()
         db.close()
@@ -294,7 +294,7 @@ def remove_from_wishlist(buyerId, productId):
         cur.execute(query, args)
         print("Removed product from 'wish_list' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.commit()
         db.close()
@@ -314,7 +314,7 @@ def get_buyer_data(email):
             data = None
         print("Record obtained from the table 'buyer' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.close()
         return "buyer", data
@@ -333,7 +333,7 @@ def get_seller_id(email):
             id = None
         print("id obtained from the table 'seller' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.close()
         return id
@@ -352,7 +352,7 @@ def get_product_quantity_in_cart(cartNo, productId):
             quantity = None
         print("quantity obtained from the table 'cartItems' ")
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.close()
         return id
@@ -369,11 +369,12 @@ def get_buyer_id(email):
         if (len)(id) < 1:
             id = None
         print("id obtained from the table 'buyer' ")
+        print(id[0])
     except Exception as e:
-        print("Error DB could not be connected")
+        print("Error DB could not be connected"+str(e))
     finally:
         db.close()
-        return id
+        return id[0]
 
 #Function to get wishlist from the table 'buyer'
 def get_wishlist(email):
@@ -382,7 +383,7 @@ def get_wishlist(email):
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
         buyerId=get_buyer_id(email)
-        query = 'SELECT p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges FROM wish_list w, product p  where w.buyerId = %s AND p.id=w.productId'
+        query = 'SELECT p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges, p.id FROM wish_list w, product p  where w.buyerId = %s AND p.id=w.productId'
         args = buyerId
         cur.execute(query, args)
         list = []
@@ -390,11 +391,12 @@ def get_wishlist(email):
         if (len)(products) < 1:
             products = None
         for p in products:
-            list.append({'name': str(p[0]), 'price': p[1], 'rating': p[2], 'warranty': p[4], 'type': p[3], 'deliveryCharges':p[5]})
+            list.append({'name': str(p[0]), 'price': p[1], 'rating': p[2], 'warranty': p[4], 'type': p[3],
+                         'deliveryCharges': p[5],'id':str(p[6])})
         print(list)
         print("Record obtained from the table 'wish_list'  ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from wish_list table")
+        print("Error DB could not be connected in getting data from wish_list table"+str(e))
     finally:
         db.commit()
         db.close()
@@ -415,7 +417,7 @@ def get_cart_no(buyerId):
         print(id)
         print("Record obtained from the table 'cart'  ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from cart table")
+        print("Error DB could not be connected in getting data from cart table"+str(e))
     finally:
         db.commit()
         db.close()
@@ -436,7 +438,7 @@ def get_products_of_seller(email):
         print(products)
         print("Record obtained from the table 'product'  ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from product table")
+        print("Error DB could not be connected in getting data from product table"+str(e))
     finally:
         db.commit()
         db.close()
@@ -460,7 +462,7 @@ def get_cart_items(email):
         print(list)
         print("Record obtained from the table 'product'  ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from product table")
+        print("Error DB could not be connected in getting data from product table"+str(e))
     finally:
         db.commit()
         db.close()
@@ -481,7 +483,7 @@ def get_seller_data(email):
         print(data)
         print("Record obtained from the table 'seller' ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from seller table")
+        print("Error DB could not be connected in getting data from seller table"+str(e))
     finally:
         db.close()
         return "seller", data
@@ -507,7 +509,7 @@ def get_all_products():
             data = return_data
             print("Record obtained from the table 'product' ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from seller table")
+        print("Error DB could not be connected in getting data from seller table"+str(e))
     finally:
         db.close()
         return data
@@ -532,7 +534,7 @@ def get_4_products():
             data = return_data
             print("Record obtained from the table 'product' (only 4 for the time being) ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from seller table")
+        print("Error DB could not be connected in getting data from seller table"+str(e))
     finally:
         db.close()
         return data
@@ -558,7 +560,7 @@ def get_products_in_range(lower, upper):
             data = return_data
             print("Record obtained from the table 'product' in the price range ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from seller table")
+        print("Error DB could not be connected in getting data from seller table"+str(e))
     finally:
         db.close()
         return data
@@ -584,7 +586,7 @@ def get_product_by_name(name):
             data = return_data
             print("Record obtained from the table 'product' by name of product ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from seller table")
+        print("Error DB could not be connected in getting data from seller table"+str(e))
     finally:
         db.close()
         return data
@@ -610,7 +612,7 @@ def get_product_by_id(id):
             data = return_data
             print("Record obtained from the table 'product' by name of product ")
     except Exception as e:
-        print("Error DB could not be connected in getting data from seller table")
+        print("Error DB could not be connected in getting data from seller table"+str(e))
     finally:
         db.close()
         return data
@@ -644,7 +646,7 @@ def isEmailExists_in_buyer(email):
         else:
             return False
     except Exception as e:
-        print("ERROR DB is not connected")
+        print("ERROR DB is not connected"+str(e))
     finally:
         if db!=None:
             db.commit()
@@ -670,7 +672,7 @@ def isEmailExists_in_seller(email):
         else:
             return False
     except Exception as e:
-        print("ERROR DB is not connected")
+        print("ERROR DB is not connected"+str(e))
     finally:
             db.close()
 
@@ -694,7 +696,7 @@ def isPasswordCorrect_in_buyer(email, password):
                 print("pass not found in buyer")
                 return False
         except Exception as e:
-            print("ERRORRRR DB not connected in get password for buyer")
+            print("ERRORRRR DB not connected in get password for buyer"+str(e))
         finally:
             if db != None:
                 db.close()
@@ -720,7 +722,7 @@ def isPasswordCorrect_in_seller(email, password):
                 print("pass not found in seller table")
                 return False
         except Exception as e:
-            print("ERRORRRR DB could not be connected in get password for seller")
+            print("ERRORRRR DB could not be connected in get password for seller"+str(e))
         finally:
             if db != None:
                 db.close()
@@ -745,7 +747,7 @@ def is_security_question_and_answer_correct_in_buyer(email, securityQuestion, an
         else:
             return False
     except Exception as e:
-        print("ERRORRRR DB not connected in get password for buyer")
+        print("ERRORRRR DB not connected in get password for buyer"+str(e))
     finally:
         if db != None:
             db.close()
@@ -767,7 +769,7 @@ def is_security_question_and_answer_correct_in_seller(email, securityQuestion, a
         else:
             return False
     except Exception as e:
-        print("ERRORRRR DB not connected in get password for seller")
+        print("ERRORRRR DB not connected in get password for seller"+str(e))
     finally:
         if db != None:
             db.close()

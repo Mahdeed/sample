@@ -8,4 +8,16 @@ $(document).ready(  function() {
     socket.on('connetion',function(data){
          console.log(String(data));
     });
+    socket.on('viewCartItem',function(data){
+        if(data['flag'] == 0)
+            document.getElementById('header_cart').innerHTML = data['html'];
+        else
+        document.getElementById('mobile_header_cart').innerHTML = data['html'];
+     });
+    socket.on('wishlistItem',function(data){
+        if(data['flag'] == 0)
+            document.getElementById('wishlistItem').innerHTML = data['html'];
+        else
+        document.getElementById('mobile_header_wishlist').innerHTML = data['html'];
+     });
 });

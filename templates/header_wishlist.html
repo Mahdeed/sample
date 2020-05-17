@@ -1,0 +1,23 @@
+{% if products %}
+<ul class="header-cart-wrapitem">
+{% set index = namespace(value=0) %}
+{% for product in products %}
+<li id="header_wishlist_{{ index.value }}" class="header-cart-item">
+<div onclick="remove_from_wishlist({{ product['id'] }},{{ index.value }});" class="header-cart-item-img">
+<img src="{{ url_for('static', filename='images/item-cart-1.jpg') }}" alt="IMG">
+</div>
+<div class="header-cart-item-txt">
+<a href="{{ url_for('product_detail', id = product['id']) }}" class="header-cart-item-name">
+{{ product['name'] }}
+</a>
+<span class="header-cart-item-info">
+{{ product['price'] }}
+</span>
+</div>
+</li>
+{% set index.value = index.value + 1 %}
+{% endfor %}
+</ul>
+    {% else %}
+<p style="text-align: center;">Wish list is Empty</p>
+{% endif %}

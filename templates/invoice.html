@@ -5,35 +5,54 @@
 
 {% block body %}
 
-<section class="bg-title-page p-t-40 p-b-50 flex-col-c-m"
-         style="background-image: url({{ url_for('static', filename='images/heading-pages-01.jpg') }});"
-         xmlns="http://www.w3.org/1999/html">
+<section class="bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url({{ url_for('static', filename='images/heading-pages-01.jpg') }});">
 <h2 class="l-text2 t-center">
 Invoice
 </h2>
 </section>
-
-   <div class="bo9 w-size18 p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 m-l-auto p-lr-15-sm">
+<section class="cart bgwhite p-t-70 p-b-100">
+<div class="container">
+    <div class="bo9 w-size18 p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 m-l-auto p-lr-15-sm">
 <h5 class="m-text20 p-b-24">
-Name: {{buyer[1]}}
+Invoice
 </h5>
-<h4 class="m-text20 p-b-24">
-Email: {{buyer[3]}}
-</h4>
 <div class="flex-w flex-sb-m p-b-12">
 <span class="s-text18 w-size19 w-full-sm">
-Total: ${{total}}
+Name:
 </span>
-<span id="subtotal" class="m-text21 w-size20 w-full-sm">
-
-</span>
+<span style="text-transform: uppercase;" class="m-text21 w-size20 w-full-sm">
+{{buyer[1]}}
+    </span>
 </div>
 
 <div class="flex-w flex-sb bo10 p-t-15 p-b-20">
 <span class="s-text18 w-size19 w-full-sm">
-Thank you for your purchase!
-</span>
+Email:
+    </span>
+<div class="w-size20 w-full-sm">
+<span style="text-transform: lowercase;" class="m-text21 w-size20 w-full-sm">
+{{buyer[3]}}
+    </span>
 </div>
-   </div>
-
+</div>
+<div class="flex-w flex-sb-m p-t-26 p-b-30">
+<span class="m-text22 w-size19 w-full-sm">
+Total:
+</span>
+<span id="grandtotal" class="m-text21 w-size20 w-full-sm">
+{{total}}
+    </span>
+</div>
+<div class="size15 trans-0-4">
+    <a href="{{ url_for('index') }}">
+    <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+Thank you for your purchase!
+</button>
+        </a>
+</div>
+</div>
+</div>
+</section>
+</div>
+</section>
 {% endblock %}

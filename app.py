@@ -20,7 +20,6 @@ def login_required(test):
         if 'logged_in' in session:
             return test(*args,**kwargs)
         else:
-            flash('You need to login first')
             return redirect(url_for('signin'))
     return wrap
 
@@ -37,7 +36,6 @@ def logout():
     if request.method == "POST":
         session.pop('logged_in', None)
         session.pop('email', None)
-        flash('You were logged out...!')
         return redirect(url_for('index'))
 
 @app.route('/login', methods=["GET", "POST"])
@@ -113,7 +111,7 @@ def signup():
                 print("Data inserted into Seller!")
                 return redirect(url_for('signin'))
 
-@app.route('/cart', methods=["GET", "POST"])
+@app.route('/cart')
 @login_required
 def cart():
     if request.method == "GET":
@@ -127,41 +125,19 @@ def cart():
         print(total)
         print(charges)
         return render_template("cart.html",products=items,total=total,charges=charges, user_login=True)
-    else:
-          print("hello from cart :)")
-          id=request.form.get('id')
-          data=db.get_product_by_id(id)
-          buyerId=db.get_buyer_id(session['email'])
-          db.insert_into_cart(buyerId)
-          print(session['email'])
-          cart=db.get_cart_no(buyerId)
-          db.insert_into_cartItems(id, cart, 1)
-          items=db.get_cart_items(session['email'])
-          print(data)
-          print(items)
-          total = 0
-          for x in items:
-              total = total + x['price']
-          charges = 0
-          for x in items:
-              charges = charges + x['charges']
-          print(total)
-          print(charges)
-          return render_template("cart.html", products=items, total=total, charges=charges, user_login=True)
 
-@app.route('/invoice', methods=["GET", "POST"])
+@app.route('/invoice')
 @login_required
 def invoice():
-    if request.method == "GET":
-           items = db.get_cart_items(session['email'])
-           account,buyer = db.get_buyer_data(session['email'])
-           total=0
-           for x in items:
-               total = total+x['price']
-               total=total+x['charges']
-           db.insert_into_invoice(buyer[1],buyer[0],total)
-           print(total)
-           return render_template("invoice.html",buyer=buyer, total=total, user_login=True)
+       items = db.get_cart_items(session['email'])
+       account,buyer = db.get_buyer_data(session['email'])
+       total=0
+       for x in items:
+           total = total+x['price']
+           total=total+x['charges']
+       db.insert_into_invoice(buyer[1],buyer[0],total)
+       print(total)
+       return render_template("invoice.html",buyer=buyer, total=total, user_login=True)
 
 @app.route('/profile', methods=["GET", "POST"])
 @login_required
@@ -295,30 +271,72 @@ def reset_password():
                 return redirect(url_for('signin'))
 
 @app.route('/product/<int:id>')
-@login_required
 def product_detail(id):
-    return render_template("product-detail.html",user_login=True)
+    if is_user_login():
+        return render_template("product-detail.html",user_login=True)
+    else:
+        return render_template("product-detail.html", user_login=False)
 
 @app.route('/product/filter', methods=["GET", "POST"])
-@login_required
 def filter():
     if request.method == "POST":
         list_category = request.form.getlist('category')
         print(list_category)
         lower_price = request.form.get('lower_price')
         higher_price = request.form.get('higher_price')
+
+
+        msg = 'Search: \t'
+        if(list_category):
+            msg += 'Categories:  '
+            for i in range(0, len(list_category)):
+                if i == (len(list_category) - 1):
+                    msg += list_category[i]+ '\t'
+                else:
+                    msg += list_category[i] + ', '
         if lower_price and higher_price is not None:
             print(db.get_products_in_range(int(lower_price), int(higher_price)))
 
-        return render_template("product.html",user_login=True)
+        if(lower_price):
+            msg += 'Price: '+lower_price
+        if(higher_price):
+            msg += ' to '+higher_price
+
+        flash(msg)
+
+        if is_user_login():
+            return render_template("product.html",user_login=True)
+        else:
+            return render_template("product.html", user_login=False)
+    else:
+        return redirect(url_for('product'))
 
 @app.route('/product/search', methods=["GET", "POST"])
-@login_required
 def search_product():
     if request.method == "POST":
         name = request.form.get('search-product')
+        print(name)
+        flash('Search: ' + name)
         data = db.get_product_by_name(name)
-        return render_template("product.html", products=data,user_login=True)
+        if is_user_login():
+            return render_template("product.html", products=data,user_login=True)
+        else:
+            return render_template("product.html", products=data, user_login=False)
+    else:
+        return redirect(url_for('product'))
+
+@app.route('/product/<search>', methods=["GET", "POST"])
+def index_button(search):
+    name = search
+    print(name)
+    flash('Search: ' + name)
+    data = db.get_product_by_name(name)
+    print(data)
+    if data:
+        if is_user_login():
+            return render_template("product.html", products=data,user_login=True)
+        else:
+            return render_template("product.html", products=data, user_login=False)
     else:
         return redirect(url_for('product'))
 
@@ -331,6 +349,68 @@ def connect():
 def event(data):
     print(request.sid)
     print(data['name'])
+
+@socketio.on('add_to_cart')
+def add_to_cart(data):
+    print(data['check'])
+    print(data['id'])
+    buyer_email = db.get_buyer_id(session['email'])
+    if (buyer_email):
+        db.insert_into_cart(buyer_email,data['id'],'1')
+    else:
+        db.insert_into_cart(db.get_seller_id(session['email']),data['id'],'1')
+
+@socketio.on('remove_from_cart')
+def remove_from_cart(data):
+    print(data['check'])
+    print(data['id'])
+    buyer_email = db.get_buyer_id(session['email'])
+    if (buyer_email):
+        db.remove_from_cart(buyer_email,data['id'])
+    else:
+        db.remove_from_cart(db.get_seller_id(session['email']),data['id'])
+
+@socketio.on('add_to_wishlist')
+def add_to_wishlist(data):
+    print(data['check'])
+    print(data['id'])
+    buyer_email = db.get_buyer_id(session['email'])
+    if(buyer_email):
+        db.insert_into_wish_list(buyer_email,data['id'])
+    else:
+        db.insert_into_wish_list(db.get_seller_id(session['email']), data['id'])
+@socketio.on('remove_from_wishlist')
+def remove_from_wishlist(data):
+    print(data['check'])
+    print(data['id'])
+    buyer_email = db.get_buyer_id(session['email'])
+    if (buyer_email):
+        db.remove_from_wishlist(buyer_email,data['id'])
+    else:
+        db.remove_from_wishlist(db.get_seller_id(session['email']), data['id'])
+
+@socketio.on('wishlistItem')
+def wishlistItem(data):
+    print(data['check'])
+    print(data['flag'])
+    items = db.get_wishlist(session['email'])
+    print(items)
+    emit('wishlistItem',{'html':render_template('header_wishlist.html',products=items),'flag':data['flag']},request.sid)
+
+@socketio.on('viewCartItem')
+def viewCartItem(data):
+    print(data['check'])
+    print(data['flag'])
+    items = db.get_cart_items(session['email'])
+    total = 0
+    for x in items:
+        total = total + x['price']
+    charges = 0
+    for x in items:
+        charges = charges + x['charges']
+    print(total)
+    print(charges)
+    emit('viewCartItem',{'html':render_template('header_cart.html',products=items,total=total+charges),'flag':data['flag']},request.sid)
 
 ############### Static Pages ################################
 @app.route('/faq')
