@@ -445,7 +445,7 @@ def get_cart_items(email):
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT p.id, p.name, p.price, p.deliveryCharges, i.quantity from product p, cart c, cartItems i, buyer b where b.email=%s AND c.buyerId=b.id and i.cartNo=c.cartNo and p.id=i.productId'
+        query = 'SELECT p.id, p.name, p.price, p.deliveryCharges, i.quantity from product p, cart c, cartitems i, buyer b where b.email=%s AND c.buyerId=b.id and i.cartNo=c.cartNo and p.id=i.productId'
         args = email
         cur.execute(query, args)
         list=[]
