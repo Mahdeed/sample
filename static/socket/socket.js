@@ -8,6 +8,12 @@ $(document).ready(  function() {
     socket.on('connetion',function(data){
          console.log(String(data));
     });
+    socket.on('charges_total_header',function(data){
+        if(document.getElementById('charges_total_header'))
+        {
+            document.getElementById('charges_total_header').innerHTML = 'Charges: '+String(data['charges'])+'   Total: '+String(data['total']);
+        }
+    });
     socket.on('viewCartItem',function(data){
         if(data['flag'] == 0)
             document.getElementById('header_cart').innerHTML = data['html'];

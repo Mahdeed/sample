@@ -118,7 +118,7 @@ def cart():
         items = db.get_cart_items(session['email'])
         total = 0
         for x in items:
-            total = total + x['price']
+            total = total + (x['price'] * x['quantity'])
         charges = 0
         for x in items:
             charges = charges + x['charges']
@@ -133,7 +133,7 @@ def invoice():
        account,buyer = db.get_buyer_data(session['email'])
        total=0
        for x in items:
-           total = total+x['price']
+           total = total+(x['price'] * x['quantity'])
            total=total+x['charges']
        db.insert_into_invoice(buyer[1],buyer[0],total)
        print(total)
@@ -360,6 +360,10 @@ def add_to_cart(data):
     else:
         db.insert_into_cart(db.get_seller_id(session['email']),data['id'],'1')
 
+@socketio.on('update_cart')
+def update_cart():
+    pass
+
 @socketio.on('remove_from_cart')
 def remove_from_cart(data):
     print(data['check'])
@@ -369,6 +373,17 @@ def remove_from_cart(data):
         db.remove_from_cart(buyer_email,data['id'])
     else:
         db.remove_from_cart(db.get_seller_id(session['email']),data['id'])
+
+    items = db.get_cart_items(session['email'])
+    total = 0
+    for x in items:
+        total = total + (x['price'] * x['quantity'])
+    charges = 0
+    for x in items:
+        charges = charges + x['charges']
+    print(total)
+    print(charges)
+    emit('charges_total_header',{'total':total+charges,'charges':charges},request.sid)
 
 @socketio.on('add_to_wishlist')
 def add_to_wishlist(data):
@@ -404,13 +419,13 @@ def viewCartItem(data):
     items = db.get_cart_items(session['email'])
     total = 0
     for x in items:
-        total = total + x['price']
+        total = total + (x['price']* x['quantity'])
     charges = 0
     for x in items:
         charges = charges + x['charges']
     print(total)
     print(charges)
-    emit('viewCartItem',{'html':render_template('header_cart.html',products=items,total=total+charges),'flag':data['flag']},request.sid)
+    emit('viewCartItem',{'html':render_template('header_cart.html',products=items,total=total+charges,charges=charges),'flag':data['flag']},request.sid)
 
 ############### Static Pages ################################
 @app.route('/faq')

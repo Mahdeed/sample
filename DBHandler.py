@@ -122,30 +122,46 @@ def insert_into_product(name, price, warranty, type, deliveryCharges, seller):
         db.commit()
         db.close()
 
+# Generate New Cart No
+def new_cart_no(buyerId):
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cursor = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = "INSERT INTO cart(buyerId) VALUES(%s) "
+        args = buyerId
+        cursor.execute(query, args)
+        print("New Cart NO is inserted")
+    except Exception as e:
+        print("New cart no" + str(e))
+    finally:
+        db.commit()
+        db.close()
+
 #Function to insert info into 'cart' table #
 def insert_into_cart(buyerId, productId, quantity):
     try:
         cartNo = get_cart_no(buyerId)
         if cartNo == None:
-            db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
-            cursor = db.cursor()
-            print("DATABASE IS CONNECTED")
-            query = "INSERT INTO cart(buyerId) VALUES(%s) "
-            args = buyerId
-            cursor.execute(query, args)
+            new_cart_no(buyerId)
+            insert_into_cart(buyerId,productId,quantity)
         else:
             db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
             cursor = db.cursor()
             print("DATABASE IS CONNECTED")
-            if get_product_quantity_in_cart(cartNo, productId) != None:
-                increase_product_quantity_in_cart(cartNo, productId)
+            exist_quantity = get_product_quantity_in_cart(cartNo, productId)
+            data = get_product_by_id(productId)
+            if exist_quantity:
+                if data:
+                    if data[0]['quantity'] != exist_quantity:
+                        increase_product_quantity_in_cart(cartNo, productId)
             else:
                 query = "INSERT INTO cartItems(cartNo, productId, quantity) VALUES(%s,%s,%s) "
                 args = (cartNo, productId, quantity)
                 cursor.execute(query, args)
                 print("Record inserted into the table 'cartItems' ")
     except Exception as e:
-        print("Error DB could not be connected"+str(e))
+        print("Error DB could not be connected "+str(e))
     finally:
         db.commit()
         db.close()
@@ -310,7 +326,7 @@ def get_buyer_data(email):
         args = email
         cur.execute(query, args)
         data = cur.fetchone()
-        if (len)(data) < 1:
+        if not data:
             data = None
         print("Record obtained from the table 'buyer' ")
     except Exception as e:
@@ -329,7 +345,7 @@ def get_seller_id(email):
         args = email
         cur.execute(query, args)
         id = cur.fetchone()
-        if (len)(id) < 1:
+        if not id:
             id = None
         print("id obtained from the table 'seller' ")
     except Exception as e:
@@ -348,14 +364,17 @@ def get_product_quantity_in_cart(cartNo, productId):
         args = (cartNo, productId)
         cur.execute(query, args)
         quantity = cur.fetchone()
-        if (len)(quantity) < 1:
+        if not quantity:
             quantity = None
+        else:
+            quantity=quantity[0]
         print("quantity obtained from the table 'cartItems' ")
+        print(quantity)
     except Exception as e:
         print("Error DB could not be connected"+str(e))
     finally:
         db.close()
-        return id
+        return quantity
 #Function to get buyer id from table 'buyer'
 def get_buyer_id(email):
     try:
@@ -366,15 +385,17 @@ def get_buyer_id(email):
         args = email
         cur.execute(query, args)
         id = cur.fetchone()
-        if (len)(id) < 1:
+        if not id:
             id = None
+        else:
+            id=id[0]
         print("id obtained from the table 'buyer' ")
-        print(id[0])
+        print(id)
     except Exception as e:
         print("Error DB could not be connected"+str(e))
     finally:
         db.close()
-        return id[0]
+        return id
 
 #Function to get wishlist from the table 'buyer'
 def get_wishlist(email):
@@ -388,7 +409,7 @@ def get_wishlist(email):
         cur.execute(query, args)
         list = []
         products = cur.fetchall()
-        if (len)(products) < 1:
+        if not products:
             products = None
         for p in products:
             list.append({'name': str(p[0]), 'price': p[1], 'rating': p[2], 'warranty': p[4], 'type': p[3],
@@ -412,9 +433,10 @@ def get_cart_no(buyerId):
         args = buyerId
         cur.execute(query, args)
         id = cur.fetchone()
-        if (len)(id) < 1:
-            id = None
-        print(id)
+        if id:
+            id=id[0]
+        else:
+            id=None
         print("Record obtained from the table 'cart'  ")
     except Exception as e:
         print("Error DB could not be connected in getting data from cart table"+str(e))
@@ -433,7 +455,7 @@ def get_products_of_seller(email):
         args = email
         cur.execute(query, args)
         products = cur.fetchall()
-        if (len)(products) < 1:
+        if not products:
             products = None
         print(products)
         print("Record obtained from the table 'product'  ")
@@ -455,10 +477,11 @@ def get_cart_items(email):
         cur.execute(query, args)
         list=[]
         products = cur.fetchall()
-        if (len)(products) < 1:
+        if not products:
             products = None
         for p in products:
-            list.append({'id':str(p[0]),'name': p[1],'price':p[2],'quantity':p[4],'charges':p[3]})
+            product_max_quantity = get_product_by_id(p[0])
+            list.append({'id':str(p[0]),'name': p[1],'price':p[2],'quantity':p[4],'charges':p[3], 'max_quantity': product_max_quantity[0]['quantity']})
         print(list)
         print("Record obtained from the table 'product'  ")
     except Exception as e:
@@ -478,7 +501,7 @@ def get_seller_data(email):
         args = email
         cur.execute(query, args)
         data = cur.fetchone()
-        if (len)(data) < 1:
+        if not data:
             data = None
         print(data)
         print("Record obtained from the table 'seller' ")
@@ -500,7 +523,7 @@ def get_all_products():
         query = 'SELECT id, name, price FROM product'
         cur.execute(query)
         data = cur.fetchall()
-        if (len)(data) < 1:
+        if not data:
             data = None
         else:
             return_data = []
@@ -525,7 +548,7 @@ def get_4_products():
         query = 'SELECT id, name, price FROM product LIMIT 6'
         cur.execute(query)
         data = cur.fetchall()
-        if (len)(data) < 1:
+        if not data:
             data = None
         else:
             return_data = []
@@ -551,7 +574,7 @@ def get_products_in_range(lower, upper):
         args = (lower, upper)
         cur.execute(query, args)
         data = cur.fetchall()
-        if (len)(data) < 1:
+        if not data:
             data = None
         else:
             return_data = []
@@ -577,7 +600,7 @@ def get_product_by_name(name):
         args = (name)
         cur.execute(query, args)
         data = cur.fetchall()
-        if (len)(data) < 1:
+        if not data:
             data = None
         else:
             return_data = []
@@ -599,16 +622,16 @@ def get_product_by_id(id):
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT id, name, price, deliveryCharges FROM product WHERE id = %s'
+        query = 'SELECT id, name, price, deliveryCharges, quantity FROM product WHERE id = %s'
         args = (id)
         cur.execute(query, args)
         data = cur.fetchall()
-        if (len)(data) < 1:
+        if not data:
             data = None
         else:
             return_data = []
             for temp in data:
-                return_data.append({'id': str(temp[0]), 'name': temp[1], 'price': temp[2], 'charges': temp[3]})
+                return_data.append({'id': str(temp[0]), 'name': temp[1], 'price': temp[2], 'charges': temp[3], 'quantity': temp[4]})
             data = return_data
             print("Record obtained from the table 'product' by name of product ")
     except Exception as e:
@@ -639,9 +662,12 @@ def isEmailExists_in_buyer(email):
         arg = (email)
         cursor.execute(query, arg)
         emails = cursor.fetchone()
-        print(len(emails))
-        print(emails[0])
-        if email == emails[0]:
+        if emails:
+            emails=emails[0]
+        else:
+            emails=None
+        print(emails)
+        if email == emails:
             return True
         else:
             return False
@@ -688,8 +714,12 @@ def isPasswordCorrect_in_buyer(email, password):
             args = (email)
             cursor.execute(query, args)
             passWord = cursor.fetchone()
-            print(passWord[0])
-            if password == passWord[0]:
+            if passWord:
+                passWord=passWord[0]
+            else:
+                passWord=None
+            print(passWord)
+            if password == passWord:
                 print("password found in buyer")
                 return True
             else:
@@ -714,8 +744,11 @@ def isPasswordCorrect_in_seller(email, password):
             args = (email)
             cursor.execute(query, args)
             passWord = cursor.fetchone()
-            print(passWord[0])
-            if password == passWord[0]:
+            if passWord:
+                passWord=passWord[0]
+            else:
+                passWord=None
+            if password == passWord:
                 print("password found in seller table")
                 return True
             else:
