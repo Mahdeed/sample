@@ -272,15 +272,8 @@ def insert_into_seller_address_and_phoneN(email ,address, phoneNumber):
 #### FUNCTIONS TO 'INSERT' INTO DB "ENDDD" HEREEEE ####
 #################################################################################################################################
 
-
-
-
-
-
-
-#### FUNCTIONS TO GETT USEERRRR DATA STARTTT HEREEE ######
+##### FUNCTIONS TO REMOVE DATA FROM DB "START" HEREEE #######
 #################################################################################################################################
-
 #Function to remove roduct from cart
 def remove_from_cart(buyerId, productId):
     try:
@@ -314,6 +307,36 @@ def remove_from_wishlist(buyerId, productId):
     finally:
         db.commit()
         db.close()
+
+def remove_from_cart_via_email(email):
+    print("remove_from_card_via_email(email)")
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        query_for_buyer_ID = 'SELECT id FROM buyer WHERE email=%s'
+        args_id = email
+        buyer_id = cur.execute(query_for_buyer_ID, args_id)
+        cartNo=get_cart_no(buyer_id)
+        print("DATABASE IS CONNECTED")
+        query = 'DELETE FROM cartitems where cartNo=%s'
+        args = (cartNo)
+        cur.execute(query, args)
+        print("Removed product from 'cartitems' VIA 'EMAIL' ")
+    except Exception as e:
+        print("Error DB could not be connected" + str(e))
+    finally:
+        db.commit()
+        db.close()
+
+##### FUNCTIONS TO REMOVE DATA FROM DB "ENNNDDDDD" HEREEE #######
+#################################################################################################################################
+
+
+
+#### FUNCTIONS TO GETT USEERRRR DATA STARTTT HEREEE ######
+#################################################################################################################################
+
+
 
 #Function to get data from the table 'buyer'
 def get_buyer_data(email):
