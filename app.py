@@ -65,8 +65,7 @@ def signin():
             print(data)
             user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
             # user will have data extracted from db for the buyer or the seller
-            return redirect(url_for('profile', user=user["account"], username=user["name"], email=user["email"],
-                                   address=user["address"], phone=user["phone"], user_login=True))
+            return redirect(url_for('profile'))
         else:
             errorMsg = 'Invalid email/password!!'
             return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg, user_login=False)
@@ -301,9 +300,9 @@ def product_detail(id):
     print(product_data)
     if product_data:
         if is_user_login():
-            return render_template("product-detail.html", user_login=True)
+            return render_template("product-detail.html",id = product_data[0]['id'], name=product_data[0]['name'],price=product_data[0]['price'], user_login=True)
         else:
-            return render_template("product-detail.html", user_login=False)
+            return render_template("product-detail.html", id = product_data[0]['id'], name=product_data[0]['name'],price=product_data[0]['price'], user_login=False)
     else:
         return redirect(url_for('pageNotFound'))
 

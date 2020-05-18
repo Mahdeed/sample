@@ -529,10 +529,11 @@ def get_cart_items(email):
         products = cur.fetchall()
         if not products:
             products = None
-        for p in products:
-            product_max_quantity = get_product_by_id(p[0])
-            list.append({'id':str(p[0]),'name': p[1],'price':p[2],'quantity':p[4],'charges':p[3], 'max_quantity': product_max_quantity[0]['quantity']})
-        print(list)
+        else:
+            for p in products:
+                product_max_quantity = get_product_by_id(p[0])
+                list.append({'id':str(p[0]),'name': p[1],'price':p[2],'quantity':p[4],'charges':p[3], 'max_quantity': product_max_quantity[0]['quantity']})
+            print(list)
         print("Record obtained from the table 'product'  ")
     except Exception as e:
         print("Error DB could not be connected in getting data from product table"+str(e))
