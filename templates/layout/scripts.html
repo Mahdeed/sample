@@ -28,7 +28,7 @@
     <script src="{{ url_for('static', filename='socket/socket.js') }}"></script>
 <script>
     function add_to_cart(id) {
-        socket.emit('add_to_cart',{'check':"add_to_cart...!",'id':id});
+        socket.emit('add_to_cart',{'check':"add_to_cart...!",'id':id, 'quantity': '1'});
     }
     function remove_to_cart(id,element) {
         document.getElementById('header_cart_'+String(element)).remove();

@@ -356,13 +356,14 @@ def add_to_cart(data):
     print(data['id'])
     buyer_email = db.get_buyer_id(session['email'])
     if (buyer_email):
-        db.insert_into_cart(buyer_email,data['id'],'1')
+        db.insert_into_cart(buyer_email,data['id'],data['quantity'])
     else:
-        db.insert_into_cart(db.get_seller_id(session['email']),data['id'],'1')
+        db.insert_into_cart(db.get_seller_id(session['email']),data['id'],data['quantity'])
 
 @socketio.on('update_cart')
-def update_cart():
-    pass
+def update_cart(data):
+    print(data['check'])
+    db.remove_from_cart_via_email(session['email'])
 
 @socketio.on('remove_from_cart')
 def remove_from_cart(data):

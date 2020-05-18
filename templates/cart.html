@@ -32,7 +32,7 @@ Cart
         <tr id="table-item-{{ index.value }}" class="table-row">
 <td class="column-1">
 <div onclick="removeProductFromCart({{ product['id'] }},{{ index.value }});" class="cart-img-product b-rad-4 o-f-hidden">
-<img src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
+<img id="image_{{ index.value }}" src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT" title="{{ product['id'] }}">
 </div>
 </td>
 <td class="column-2">{{ product['name'] }}</td>
@@ -118,6 +118,21 @@ Total:
     <script>
         function removeProductFromCart(id,no) {
             document.getElementById('table-item-'+String(no)).remove();
+
+            let entities= document.querySelectorAll(".total");
+            let total = 0;
+            //console.log(entities.length);
+            for(let i=0;i<entities.length;i++)
+            {
+                console.log(document.getElementById("total-item-"+String(i)));
+                total += parseInt(document.getElementById("total-item-"+String(i)).innerText);
+                //console.log(document.getElementById("total-item-"+String(i)).innerText);
+            }
+            console.log(total);
+            console.log(document.getElementById('charges').innerText);
+            document.getElementById("subtotal").innerText= String(total);
+            document.getElementById("grandtotal").innerText= String(total+parseInt(document.getElementById('charges').innerText));
+
             socket.emit('remove_from_cart',{'check':"removeProductFromCarts...!",'id':id});
         }
         document.getElementById("cart").setAttribute("class","sale-noti");
@@ -160,7 +175,15 @@ Total:
             document.getElementById("grandtotal").innerText= String(total+parseInt(document.getElementById('charges').innerText));
         }
         function upadte_cart() {
+            socket.emit('update_cart',{'check':"update_cart...!"});
 
+            let entities= document.querySelectorAll(".total");
+            let total = 0;
+            //console.log(entities.length);
+            for(let i=0;i<entities.length;i++)
+            {
+                socket.emit('add_to_cart',{'check':"add_to_cart...!",'id':document.getElementById("image_"+String(i)).getAttribute('title'), 'quantity': document.getElementById("item-"+String(i)).value});
+            }
         }
     </script>
 {% endblock %}
