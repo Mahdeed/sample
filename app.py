@@ -53,6 +53,10 @@ def index():
 def logout():
     if request.method == "POST":
         session.pop('logged_in', None)
+        if 'buyer' in session:
+            session.pop('buyer', None)
+        else:
+            session.pop('seller', None)
         session.pop('email', None)
         return redirect(url_for('index'))
 
