@@ -331,6 +331,23 @@ def remove_from_cart_via_email(email):
         db.commit()
         db.close()
 
+#FUNCTION TO REMOVE PRODUCT from 'PRODUCT' Table VIA GIVEN 'ID'
+def remove_product_from_product_table_via_id(id):
+    print("remove_product_from_product_table_via_id(id)")
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'DELETE FROM product where id=%s'
+        args = (id)
+        cur.execute(query, args)
+        print("Removed product from 'Product' VIA 'ID' ")
+    except Exception as e:
+        print("Error DB could not be connected" + str(e))
+    finally:
+        db.commit()
+        db.close()
+
 ##### FUNCTIONS TO REMOVE DATA FROM DB "ENNNDDDDD" HEREEE #######
 #################################################################################################################################
 

@@ -33,7 +33,7 @@ def index():
 @app.route('/logout', methods=["GET","POST"])
 @login_required
 def logout():
-    if request.method == "POST":
+     if request.method == "POST":
         session.pop('logged_in', None)
         session.pop('email', None)
         return redirect(url_for('index'))
@@ -138,20 +138,6 @@ def invoice():
        db.insert_into_invoice(buyer[1],buyer[0],total)
        print(total)
        return render_template("invoice.html",buyer=buyer, total=total, user_login=True)
-
-@app.route('/product_delete/<int:id>', methods=["GET", "POST"])
-@login_required
-def delete_product(id):
-    if request.method == "POST":
-        product_data = db.get_product_by_id(id);
-        if product_data:
-            print("Delete Data in app.py")
-            print(product_data)
-            return render_template(url_for('profile'))
-        else:
-            return redirect(url_for('pageNotFound'))
-    else:
-        return redirect(url_for('pageNotFound'))
 
 @app.route('/profile', methods=["GET", "POST"])
 @login_required
@@ -481,6 +467,21 @@ def viewCartItem(data):
     print(total)
     print(charges)
     emit('viewCartItem',{'html':render_template('header_cart.html',products=items,total=total+charges,charges=charges),'flag':data['flag']},request.sid)
+
+@app.route('/product_delete/<int:id>', methods=["GET", "POST"])
+@login_required
+def delete_product(id):
+    if request.method == "POST":
+        product_data = db.get_product_by_id(id);
+        if product_data:
+            print("Delete Data in app.py")
+            print(product_data)
+            db.remove_product_from_product_table_via_id(id)
+            return redirect(url_for('profile'))
+        else:
+            return redirect(url_for('pageNotFound'))
+    else:
+        return redirect(url_for('pageNotFound'))
 
 ############### Static Pages ################################
 @app.route('/faq')
