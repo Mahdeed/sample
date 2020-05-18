@@ -315,7 +315,10 @@ def remove_from_cart_via_email(email):
         cur = db.cursor()
         query_for_buyer_ID = 'SELECT id FROM buyer WHERE email=%s'
         args_id = email
-        buyer_id = cur.execute(query_for_buyer_ID, args_id)
+        cur.execute(query_for_buyer_ID, args_id)
+        buyer_id = cur.fetchone()
+        buyer_id=buyer_id[0]
+        print(buyer_id)
         cartNo=get_cart_no(buyer_id)
         print("DATABASE IS CONNECTED")
         query = 'DELETE FROM cartitems where cartNo=%s'
