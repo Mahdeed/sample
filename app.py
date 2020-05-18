@@ -209,10 +209,10 @@ def profile():
         if data == None:
             account, data = db.get_seller_data(session['email'])
             db.insert_into_seller_address_and_phoneN(session['email'], address, phoneNumber)
-            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2], phone=data[4], user_login=True,buyer_login=('buyer' in session))
+            return redirect(url_for('profile'))
         else:
             db.insert_into_buyer_address_and_phoneN(session['email'], address, phoneNumber)
-            return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4], user_login=True,buyer_login=('buyer' in session))
+            return redirect(url_for('profile'))
 
 @app.errorhandler(404)
 def page_not_found(e):

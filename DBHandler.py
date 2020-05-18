@@ -62,7 +62,7 @@ def insert_into_buyer_address_and_phoneN(email ,address, phoneNumber):
             db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
             cursor = db.cursor()
             print("DATABASE IS CONNECTED in insert_into_Buyer")
-            query = "INSERT INTO buyer(phoneNumber, address)VALUES(%s, %s) WHERE email = %s"
+            query = "Update buyer set phoneNumber=%s, address=%s where email=%s"
             args = (phoneNumber, address, email)
             cursor.execute(query, args)
             print("Record inserted into the table 'buyer' address and phoneNumber ")
