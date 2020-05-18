@@ -254,11 +254,14 @@ def insert_password_in_seller(email, password):
 def insert_into_seller_address_and_phoneN(email ,address, phoneNumber):
     print('insert_into_seller_address_and_phoneN(email ,address, phoneNumber)')
     try:
-        if isEmailExists_in_buyer(email):
-            db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
+        if isEmailExists_in_seller(email):
+            print(phoneNumber)
+            print(address)
+            print(email)
+            db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
             cursor = db.cursor()
-            print("DATABASE IS CONNECTED in insert_into_Buyer")
-            query = "INSERT INTO seller(phoneNumber, address)VALUES(%s, %s) WHERE email = %s"
+            print("DATABASE IS CONNECTED in insert_into_seller_address_and_phoneN")
+            query = "Update seller set phoneNumber=%s, address=%s where email=%s"
             args = (phoneNumber, address, email)
             cursor.execute(query, args)
             print("Record inserted into the table 'seller' address and phoneNumber ")
@@ -742,10 +745,12 @@ def isEmailExists_in_seller(email):
         cursor.execute(query, arg)
         print("isEmailExists_in_seller execute query")
         emails = cursor.fetchone()
-        print(emails)
-        #print(emails[0])
         if emails:
-            #email == emails[0]:
+            emails = emails[0]
+        else:
+            emails = None
+        print(emails)
+        if email == emails:
             return True
         else:
             return False

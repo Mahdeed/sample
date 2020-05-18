@@ -193,6 +193,8 @@ def profile():
                                phone=data[4], user_login=True, seller_product=seller_product,buyer_login=('buyer' in session))
     else:
         account, data = db.get_buyer_data(session['email'])
+        if not data:
+            account, data = db.get_seller_data(session['email'])
         address = request.form.get('address')
         if not address:
             address =data[5]
