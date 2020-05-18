@@ -107,13 +107,13 @@ def insert_into_order(orderNo, shipmentFee):
         db.close()
 
 #Function to insert info into 'product' table #
-def insert_into_product(name, price, warranty, type, deliveryCharges, seller):
+def insert_into_product(name, price, warranty, type, deliveryCharges, seller, quantity):
     try:
         db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
         cursor = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = "INSERT INTO product(name, price, warranty, type, deliveryCharges, seller)VALUES(%s, %s, %s, %s, %s, %s)"
-        args = (name, price, warranty, type, deliveryCharges, seller)
+        query = "INSERT INTO product(name, price, warranty, type, deliveryCharges, seller, quantity)VALUES(%s, %s, %s, %s, %s, %s, %s)"
+        args = (name, price, warranty, type, deliveryCharges, seller, quantity)
         cursor.execute(query, args)
         print("Record inserted into the table 'product' ")
     except Exception as e:
@@ -477,12 +477,19 @@ def get_products_of_seller(email):
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges FROM seller s, product p  where s.email = %s AND p.seller=s.id'
+        query = 'SELECT p.id, p.name, p.price, p.rating, p.warranty, p.type, p.deliveryCharges FROM seller s, product p  where s.email = %s AND p.seller=s.id'
         args = email
         cur.execute(query, args)
         products = cur.fetchall()
         if not products:
             products = None
+        else:
+            list_of_products = []
+            for temp in products:
+                list_of_products.append({'id':str(temp[0]),'name':temp[1], 'price':temp[2],'rating':temp[3],'warranty':temp[4],'type':temp[5],'deliveryCharges':temp[6]})
+            print("Seller all product:")
+            print(list_of_products)
+            products=list_of_products
         print(products)
         print("Record obtained from the table 'product'  ")
     except Exception as e:
@@ -648,7 +655,7 @@ def get_product_by_id(id):
         db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
         cur = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = 'SELECT id, name, price, deliveryCharges, quantity FROM product WHERE id = %s'
+        query = 'SELECT id, name, price, deliveryCharges, quantity, warranty, type FROM product WHERE id = %s'
         args = (id)
         cur.execute(query, args)
         data = cur.fetchall()
@@ -657,7 +664,7 @@ def get_product_by_id(id):
         else:
             return_data = []
             for temp in data:
-                return_data.append({'id': str(temp[0]), 'name': temp[1], 'price': temp[2], 'charges': temp[3], 'quantity': temp[4]})
+                return_data.append({'id': str(temp[0]), 'name': temp[1], 'price': temp[2], 'charges': temp[3], 'quantity': temp[4],'warranty': temp[5],'type':temp[6]})
             data = return_data
             print("Record obtained from the table 'product' by name of product ")
     except Exception as e:

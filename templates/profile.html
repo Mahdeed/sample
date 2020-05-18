@@ -68,12 +68,12 @@
                 <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                   <div style="margin-top: 45px" class="text-center text-sm-left mb-2 mb-sm-0">
                     <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{ username }}</h4>
-                      <div class="mt-2">
-                      <button class="btn btn-primary" type="button">
-                        <i class="fa fa-fw fa-camera"></i>
-                        <input type="file" id="img" name="img" accept="image/*">
-                      </button>
-                    </div>
+{#                      <div class="mt-2">#}
+{#                      <button class="btn btn-primary" type="button">#}
+{#                        <i class="fa fa-fw fa-camera"></i>#}
+{#                        <input type="file" id="img" name="img" accept="image/*">#}
+{#                      </button>#}
+{#                    </div>#}
                   </div>
                   <div class="text-center text-sm-right">
                     <span class="badge badge-secondary">{{user}}</span>
@@ -168,110 +168,42 @@
     </div>
   {% if user == "seller" %}
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
+    {% if seller_product %}
         <div style="margin-top: 50px" class="row">
-                            <div class="col-md-3 col-sm-6">
-                                <div class="product-grid9">
-                                    <div class="product-image9">
-                                        <a href="#">
-                                            <img class="pic-1" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-1.jpg">
-                                            <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-2.jpg">
-                                        </a>
-                                        <a href="#" class="fa fa-search product-full-view"></a>
-                                    </div>
-                                    <div class="product-content">
-                                        <a href="{{ url_for('edit_product') }}"><button class="btn btn-secondary">Edit</button></a>
-                                        <ul class="rating">
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                        </ul>
-                                        <h3 class="title"><a href="#">Women's Top</a></h3>
-                                        <div class="price"> $12.60 - $40.53</div>
-                                        <a class="add-to-cart" href="">VIEW PRODUCTS</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="product-grid9">
-                                    <div class="product-image9">
-                                        <a href="#">
-                                            <img class="pic-1" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-3.jpg">
-                                            <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-4.jpg">
-                                        </a>
-                                        <a href="#" class="fa fa-search product-full-view"></a>
-                                    </div>
-                                    <div class="product-content">
-                                        <a href="{{ url_for('edit_product') }}"><button class="btn btn-secondary">Edit</button></a>
-                                        <ul class="rating">
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star disable"></li>
-                                            <li class="fa fa-star disable"></li>
-                                        </ul>
-                                        <h3 class="title"><a href="#">Men's Shirt</a></h3>
-                                        <div class="price"> $10.20 </div>
-                                        <a class="add-to-cart" href="">READ MORE</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="product-grid9">
-                                    <div class="product-image9">
-                                        <a href="#">
-                                            <img class="pic-1" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-5.jpg">
-                                            <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-6.jpg">
-                                        </a>
-                                        <a href="#" class="fa fa-search product-full-view"></a>
-                                    </div>
-                                    <div class="product-content">
-                                        <a href="{{ url_for('edit_product') }}"><button class="btn btn-secondary">Edit</button></a>
-                                        <ul class="rating">
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                        </ul>
-                                        <h3 class="title"><a href="#">Women's Top</a></h3>
-                                        <div class="price"> $12.60 - $40.53</div>
-                                        <a class="add-to-cart" href="">VIEW PRODUCTS</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="product-grid9">
-                                    <div class="product-image9">
-                                        <a href="#">
-                                            <img class="pic-1" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-7.jpg">
-                                            <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-8.jpg">
-                                        </a>
-                                        <a href="#" class="fa fa-search product-full-view"></a>
-                                    </div>
-                                    <div class="product-content">
-                                        <a href="{{ url_for('edit_product') }}"><button class="btn btn-secondary">Edit</button></a>
-                                        <ul class="rating">
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                            <li class="fa fa-star"></li>
-                                        </ul>
-                                        <h3 class="title"><a href="#">Women's Top</a></h3>
-                                        <div class="price"> $12.60 - $40.53</div>
-                                        <a class="add-to-cart" href="">VIEW PRODUCTS</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    <div style="margin-top: 50px" class="row">
-                      <div class="col d-flex justify-content-center">
-                        <a href="{{ url_for('add_product') }}"><button class="btn btn-primary" >Add New</button></a>
-                      </div>
+            {% set index = namespace(value=0) %}
+            {% for product in seller_product %}
+            <div class="col-md-3 col-sm-6">
+                <div class="product-grid9">
+                    <div class="product-image9">
+                        <a href="{{ url_for('product_detail', id = product['id']) }}">
+                            <img id="image_{{ index.value }}" src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT" title="{{ product['id'] }}">
+                        </a>
+                        <a href="{{ url_for('product_detail', id = product['id']) }}" class="fa fa-search product-full-view"></a>
                     </div>
+                    <div class="product-content">
+                        <a href="{{ url_for('edit_product', id = product['id']) }}"><button class="btn btn-secondary">Edit</button></a>
+                        <ul class="rating">
+                        {% if not(product['rating'] == '0') %}
+                            {% for rating in range(0,product['rating']) %}
+                            <li class="fa fa-star"></li>
+                            {% endfor %}
+                        {% endif %}
+                        </ul>
+                        <h3 class="title"><a href="{{ url_for('product_detail', id = product['id']) }}">{{ product['name'] }}</a></h3>
+                        <div class="price">{{ product['price'] }}</div>
+                        <a class="add-to-cart" href="{{ url_for('product_detail', id = product['id']) }}">VIEW PRODUCTS</a>
+                    </div>
+                </div>
+            </div>
+            {% set index.value = index.value + 1 %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div style="margin-top: 50px" class="row">
+      <div class="col d-flex justify-content-center">
+        <a href="{{ url_for('add_product') }}"><button class="btn btn-primary" >Add New</button></a>
+      </div>
+    </div>
     </div>
     {% endif %}
 </div>

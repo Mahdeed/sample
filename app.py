@@ -143,11 +143,13 @@ def invoice():
 @login_required
 def profile():
     if request.method == "GET":
+        seller_product = None
         account,data = db.get_buyer_data(session['email'])
         if data == None:
             account, data = db.get_seller_data(session['email'])
+            seller_product = db.get_products_of_seller(session['email'])
         return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[2],
-                               phone=data[4], user_login=True)
+                               phone=data[4], user_login=True, seller_product=seller_product)
     else:
         email = request.form.get(session['email'])
         address = request.form.get('address')
@@ -164,42 +166,58 @@ def profile():
             db.get_buyer_data(session['email'])
             return render_template("profile.html", user=account, username=data[1], email=data[3], address=data[5], phone=data[4], user_login=True)
 
-@app.route('/edit_product', methods=["GET", "POST"])
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
+
+@app.route('/edit_product/<int:id>', methods=["GET", "POST"])
 @login_required
-def edit_product():
+def edit_product(id):
     if request.method == "GET":
-        return render_template("add_edit_product.html",title="Edit", name="shirt", type="men", warranty="2 years", price="123", charges="123", user_login=True)
+        product_data = db.get_product_by_id(id);
+        if product_data:
+            print("Edit Data in app.py")
+            print(product_data)
+            return render_template("add_edit_product.html",title="Edit",ids=product_data[0]['id'],product_name=product_data[0]['name'],  name=product_data[0]['name'], type=product_data[0]['type'], warranty=product_data[0]['warranty'], quantity= product_data[0]['quantity'], price=product_data[0]['price'], charges=product_data[0]['charges'], user_login=True)
+        else:
+            return redirect(url_for(page_not_found))
+
     else:
         name = request.form.get('name')
         type = request.form.get('type')
         price = int(request.form.get('price'))
-        warranty = int(request.form.get('warranty'))
-        charges = int(request.form.get('charges'))
-        email = 'mahad@kutta.com'
+        warranty = request.form.get('warranty')
+        if warranty:
+            warranty = int(warranty)
+        charges = request.form.get('charges')
+        if charges:
+            charges = int(charges)
+        email = session['email']
         id = db.get_seller_id(email)
         db.edit_product(name, price, warranty, type, charges, id)
-        data=db.get_products_of_seller(email)
-        return render_template("add_edit_product.html",title="Edit", name="cocaine", type="men", warranty="2 years", price="123",
-                               charges="1234", user_login=True)
+        return redirect(url_for('profile'))
 
 @app.route('/add_product',methods=["GET", "POST"])
 @login_required
 def add_product():
     if request.method == "GET":
         return render_template("add_edit_product.html", title="Add Product", name="Product Name", type="Type",
-                               price="123", warranty="Years", charges="123", user_login=True)
+                               price="123", quantity='20', warranty="Years", charges="123", user_login=True)
     else:
         name = request.form.get('name')
         type = request.form.get('type')
         price = int(request.form.get('price'))
-        warranty = int(request.form.get('warranty'))
-        charges = int(request.form.get('charges'))
+        quantity = int(request.form.get('quantity'))
+        warranty = request.form.get('warranty')
+        if warranty:
+            warranty=int(warranty)
+        charges = request.form.get('charges')
+        if charges:
+            charges=int(charges)
         email = session['email']
         id = db.get_seller_id(email)
-        db.insert_into_product(name, price, warranty, type, charges, id)
-        data = db.get_products_of_seller(email)
-        return render_template("add_edit_product.html", name="product", type=" ", warranty=" ", price=" ",
-                               charges=" ",products=data, user_login=True)
+        db.insert_into_product(name, price, warranty, type, charges, id,quantity)
+        return redirect(url_for('profile'))
 
 @app.route('/product')
 def product():
@@ -404,6 +422,7 @@ def add_to_wishlist(data):
         db.insert_into_wish_list(buyer_email,data['id'])
     else:
         db.insert_into_wish_list(db.get_seller_id(session['email']), data['id'])
+
 @socketio.on('remove_from_wishlist')
 def remove_from_wishlist(data):
     print(data['check'])

@@ -71,12 +71,6 @@
                 <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                   <div style="margin-top: 45px" class="text-center text-sm-left mb-2 mb-sm-0">
                     <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{ product_name }}</h4>
-                      <div class="mt-2">
-                      <button class="btn btn-primary" type="button">
-                        <i class="fa fa-fw fa-camera"></i>
-                        <input type="file" id="img" name="img" accept="image/*">
-                      </button>
-                    </div>
                   </div>
                   <div class="text-center text-sm-right">
                     <span class="badge badge-secondary">product</span>
@@ -93,7 +87,7 @@
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
         {% if title == "Edit" %}
-            <form class="form" novalidate="" action="{{url_for('edit_product')}}" method="post">
+            <form class="form" novalidate="" action="{{url_for('edit_product', id = ids)}}" method="post">
         {% else %}
             <form class="form" novalidate="" action="{{url_for('add_product')}}" method="post">
         {% endif %}
@@ -103,7 +97,7 @@
                           <div class="col">
                             <div class="form-group">
                               <label>Product Name</label>
-                              <input class="form-control" type="text" name="name" placeholder="{{ name }}" value="{{ name }}">
+                              <input class="form-control" type="text" name="name" placeholder="{{ name }}" value="{{ name }}" required>
                             </div>
                           </div>
                         </div>
@@ -111,7 +105,7 @@
                           <div class="col">
                             <div class="form-group">
                               <label>Type</label>
-                              <input class="form-control" type="text" name="type" placeholder="{{ type }}">
+                              <input class="form-control" type="text" name="type" placeholder="{{ type }}" required>
                             </div>
                           </div>
                         </div>
@@ -119,7 +113,15 @@
                           <div class="col">
                             <div class="form-group">
                               <label>Price</label>
-                              <input class="form-control" type="text" name="price" placeholder="{{ price }}">
+                              <input class="form-control" type="text" name="price" placeholder="{{ price }}" required>
+                            </div>
+                          </div>
+                        </div>
+                          <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <label>Quantity</label>
+                              <input class="form-control" type="text" name="quantity" placeholder="{{ quantity }}" required>
                             </div>
                           </div>
                         </div>
