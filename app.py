@@ -139,6 +139,20 @@ def invoice():
        print(total)
        return render_template("invoice.html",buyer=buyer, total=total, user_login=True)
 
+@app.route('/product_delete/<int:id>', methods=["GET", "POST"])
+@login_required
+def delete_product(id):
+    if request.method == "POST":
+        product_data = db.get_product_by_id(id);
+        if product_data:
+            print("Delete Data in app.py")
+            print(product_data)
+            return render_template(url_for('profile'))
+        else:
+            return redirect(url_for('pageNotFound'))
+    else:
+        return redirect(url_for('pageNotFound'))
+
 @app.route('/profile', methods=["GET", "POST"])
 @login_required
 def profile():
@@ -168,19 +182,25 @@ def profile():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html')
+    return render_template('404.html', user_login=True)
+
+@app.route('/404')
+def pageNotFound():
+    return render_template('404.html', user_login=True)
 
 @app.route('/edit_product/<int:id>', methods=["GET", "POST"])
 @login_required
 def edit_product(id):
     if request.method == "GET":
         product_data = db.get_product_by_id(id);
+        print("Check exist or not:")
+        print(product_data)
         if product_data:
             print("Edit Data in app.py")
             print(product_data)
             return render_template("add_edit_product.html",title="Edit",ids=product_data[0]['id'],product_name=product_data[0]['name'],  name=product_data[0]['name'], type=product_data[0]['type'], warranty=product_data[0]['warranty'], quantity= product_data[0]['quantity'], price=product_data[0]['price'], charges=product_data[0]['charges'], user_login=True)
         else:
-            return redirect(url_for(page_not_found))
+            return redirect(url_for('pageNotFound'))
 
     else:
         name = request.form.get('name')
@@ -290,10 +310,16 @@ def reset_password():
 
 @app.route('/product/<int:id>')
 def product_detail(id):
-    if is_user_login():
-        return render_template("product-detail.html",user_login=True)
+    product_data = db.get_product_by_id(id);
+    print("Check exist or not:")
+    print(product_data)
+    if product_data:
+        if is_user_login():
+            return render_template("product-detail.html", user_login=True)
+        else:
+            return render_template("product-detail.html", user_login=False)
     else:
-        return render_template("product-detail.html", user_login=False)
+        return redirect(url_for('pageNotFound'))
 
 @app.route('/product/filter', methods=["GET", "POST"])
 def filter():
