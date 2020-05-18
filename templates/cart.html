@@ -102,7 +102,7 @@ Total:
 </div>
 <div class="size15 trans-0-4">
     <a href="{{ url_for('invoice') }}">
-<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+<button onclick="upadte_cart();" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
     Proceed to Checkout
 </button>
         </a>
@@ -124,12 +124,12 @@ Total:
             //console.log(entities.length);
             for(let i=0;i<entities.length;i++)
             {
-                console.log(document.getElementById("total-item-"+String(i)));
+                //console.log(document.getElementById("total-item-"+String(i)));
                 total += parseInt(document.getElementById("total-item-"+String(i)).innerText);
                 //console.log(document.getElementById("total-item-"+String(i)).innerText);
             }
-            console.log(total);
-            console.log(document.getElementById('charges').innerText);
+            //console.log(total);
+            //console.log(document.getElementById('charges').innerText);
             document.getElementById("subtotal").innerText= String(total);
             document.getElementById("grandtotal").innerText= String(total+parseInt(document.getElementById('charges').innerText));
 
@@ -165,25 +165,17 @@ Total:
             //console.log(entities.length);
             for(let i=0;i<entities.length;i++)
             {
-                console.log(document.getElementById("total-item-"+String(i)));
+                //console.log(document.getElementById("total-item-"+String(i)));
                 total += parseInt(document.getElementById("total-item-"+String(i)).innerText);
                 //console.log(document.getElementById("total-item-"+String(i)).innerText);
             }
-            console.log(total);
-            console.log(document.getElementById('charges').innerText);
+            //console.log(total);
+            //console.log(document.getElementById('charges').innerText);
             document.getElementById("subtotal").innerText= String(total);
             document.getElementById("grandtotal").innerText= String(total+parseInt(document.getElementById('charges').innerText));
         }
         function upadte_cart() {
             socket.emit('update_cart',{'check':"update_cart...!"});
-
-            let entities= document.querySelectorAll(".total");
-            let total = 0;
-            //console.log(entities.length);
-            for(let i=0;i<entities.length;i++)
-            {
-                socket.emit('add_to_cart',{'check':"add_to_cart...!",'id':document.getElementById("image_"+String(i)).getAttribute('title'), 'quantity': document.getElementById("item-"+String(i)).value});
-            }
         }
     </script>
 {% endblock %}

@@ -352,18 +352,27 @@ def event(data):
 
 @socketio.on('add_to_cart')
 def add_to_cart(data):
-    print(data['check'])
-    print(data['id'])
-    buyer_email = db.get_buyer_id(session['email'])
-    if (buyer_email):
-        db.insert_into_cart(buyer_email,data['id'],data['quantity'])
+    if(data['id'] == None):
+        print(data['check'])
+        print(data['all_data'])
+        buyer_email = db.get_buyer_id(session['email'])
+        if (buyer_email):
+            for all_products in data['all_data']:
+                db.insert_into_cart(buyer_email, all_products['id'], all_products['quantity'])
     else:
-        db.insert_into_cart(db.get_seller_id(session['email']),data['id'],data['quantity'])
+        print(data['check'])
+        print(data['id'])
+        print(data['quantity'])
+        print(data['all_data'])
+        buyer_email = db.get_buyer_id(session['email'])
+        if (buyer_email):
+            db.insert_into_cart(buyer_email,data['id'],data['quantity'])
 
 @socketio.on('update_cart')
 def update_cart(data):
     print(data['check'])
     db.remove_from_cart_via_email(session['email'])
+    emit('cart_removed_via_email',True,request.sid)
 
 @socketio.on('remove_from_cart')
 def remove_from_cart(data):

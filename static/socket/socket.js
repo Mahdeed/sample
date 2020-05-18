@@ -26,4 +26,19 @@ $(document).ready(  function() {
         else
         document.getElementById('mobile_header_wishlist').innerHTML = data['html'];
      });
+    socket.on('cart_removed_via_email',function(data){
+         if(data)
+         {
+             let entities= document.querySelectorAll(".total");
+            let total = 0;
+            //console.log(entities.length);
+            let all_data = []
+            for(let i=0;i<entities.length;i++)
+            {
+                all_data.push({'id':document.getElementById("image_"+String(i)).getAttribute('title'), 'quantity': document.getElementById("item-"+String(i)).value});
+            }
+            console.log(all_data);
+            socket.emit('add_to_cart', {'check':"update_add_to_cart...!",'all_data':all_data,'id':null});
+         }
+    });
 });
