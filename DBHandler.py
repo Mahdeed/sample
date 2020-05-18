@@ -274,6 +274,22 @@ def insert_into_seller_address_and_phoneN(email ,address, phoneNumber):
 
 ##### FUNCTIONS TO REMOVE DATA FROM DB "START" HEREEE #######
 #################################################################################################################################
+def remove_product_from_product_table_via_id(id):
+    print("remove_product_from_product_table_via_id(id)")
+    try:
+        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
+        cur = db.cursor()
+        print("DATABASE IS CONNECTED")
+        query = 'DELETE FROM product where id=%s'
+        args = (id)
+        cur.execute(query, args)
+        print("Removed product from 'Product' VIA 'ID' ")
+    except Exception as e:
+        print("Error DB could not be connected" + str(e))
+    finally:
+        db.commit()
+        db.close()
+
 #Function to remove roduct from cart
 def remove_from_cart(buyerId, productId):
     try:
@@ -325,23 +341,6 @@ def remove_from_cart_via_email(email):
         args = (cartNo)
         cur.execute(query, args)
         print("Removed product from 'cartitems' VIA 'EMAIL' ")
-    except Exception as e:
-        print("Error DB could not be connected" + str(e))
-    finally:
-        db.commit()
-        db.close()
-
-#FUNCTION TO REMOVE PRODUCT from 'PRODUCT' Table VIA GIVEN 'ID'
-def remove_product_from_product_table_via_id(id):
-    print("remove_product_from_product_table_via_id(id)")
-    try:
-        db = sql.connect(DATABASEIP, DB_USER, DB_PASSWORD, DATABASE)
-        cur = db.cursor()
-        print("DATABASE IS CONNECTED")
-        query = 'DELETE FROM product where id=%s'
-        args = (id)
-        cur.execute(query, args)
-        print("Removed product from 'Product' VIA 'ID' ")
     except Exception as e:
         print("Error DB could not be connected" + str(e))
     finally:
@@ -532,7 +531,8 @@ def get_cart_items(email):
         else:
             for p in products:
                 product_max_quantity = get_product_by_id(p[0])
-                list.append({'id':str(p[0]),'name': p[1],'price':p[2],'quantity':p[4],'charges':p[3], 'max_quantity': product_max_quantity[0]['quantity']})
+                list.append({'id': str(p[0]), 'name': p[1], 'price': p[2], 'quantity': p[4], 'charges': p[3],
+                             'max_quantity': product_max_quantity[0]['quantity']})
             print(list)
         print("Record obtained from the table 'product'  ")
     except Exception as e:
@@ -541,6 +541,7 @@ def get_cart_items(email):
         db.commit()
         db.close()
         return list
+
 
 #Function to get data from the table 'seller'
 def get_seller_data(email):

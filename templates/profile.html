@@ -92,14 +92,14 @@
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                          <form class="form" novalidate="">
+                          <form class="form" novalidate="" method="post"  action="{{ url_for('profile') }}">
                     <div class="row">
                       <div class="col">
                         <div class="row">
                           <div class="col">
                             <div class="form-group">
                               <label>Full Name</label>
-                              <input class="form-control" type="text" name="name" placeholder="{{ username }}" value="{{ username }}">
+                              <input disabled="disabled" class="form-control" type="text" name="name" placeholder="{{ username }}" value="{{ username }}">
                             </div>
                           </div>
                         </div>
@@ -107,7 +107,7 @@
                           <div class="col">
                             <div class="form-group">
                               <label>Email</label>
-                              <input class="form-control" name="email" type="text" placeholder="{{ email }}">
+                              <input disabled="disabled" class="form-control" name="email" type="text" placeholder="{{ email }}">
                             </div>
                           </div>
                         </div>
@@ -128,35 +128,6 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-12 col-sm-6 mb-3">
-                        <div class="mb-2"><b>Change Password</b></div>
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                              <label>Current Password</label>
-                              <input class="form-control" type="password" placeholder="••••••">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                              <label>New Password</label>
-                              <input class="form-control" type="password" placeholder="••••••">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                              <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
-                              <input class="form-control" type="password" placeholder="••••••"></div>
-                          </div>
-                        </div>
-                      </div>
-
                     </div>
                     <div class="row">
                       <div class="col d-flex justify-content-end">

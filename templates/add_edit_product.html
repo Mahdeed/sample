@@ -152,11 +152,12 @@
     {% if title == "Edit" %}
         <div style="margin-top: 30px" class="row">
                       <div class="col d-flex justify-content-end">
-                        <form method="post" action="{{ url_for('delete_product',id = ids) }}">
-                              <button style="margin-left: 30px" class="btn btn-danger" id="delte">Delete</button>
+                        <form method="post" action="{{ url_for('delete_product', id = ids) }}">
+                              <button style="margin-left: 30px" class="btn btn-danger" id="delet">Delete</button>
                               </form>
                       </div>
                     </div>
+
                           {% endif %}
 
     </div>

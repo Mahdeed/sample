@@ -19,12 +19,14 @@
 <a href="{{ url_for('product') }}">Shop</a>
 </li>
 {% if user_login %}
+    {% if buyer_login %}
 <li id="cart">
 <a href="{{ url_for('cart') }}">Cart</a>
 </li>
 <li id="invoice">
 <a href="{{ url_for('invoice') }}">Invoice</a>
 </li>
+{% endif %}
 {% endif %}
 <li id="about">
 <a href="{{ url_for('about') }}">About</a>
@@ -41,6 +43,7 @@
 <img src="{{ url_for('static', filename='images/icons/icon-header-01.png') }}" class="header-icon1" alt="ICON">
 </a>
 <span class="linedivide1"></span>
+    {% if buyer_login %}
 <div class="header-wrapicon2">
 <img onclick="viewCartItem();" src="{{ url_for('static', filename='images/icons/icon-header-02.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
 
@@ -53,6 +56,7 @@
 <div id="wishlistItem" class="header-cart header-dropdown">
 </div>
 </div>
+        {% endif %}
 </div>
     {% else %}
     <div class="header-icons">
@@ -76,6 +80,7 @@
 <img src="{{ url_for('static', filename='images/icons/icon-header-01.png') }}" class="header-icon1" alt="ICON">
 </a>
 <span class="linedivide2"></span>
+   {% if buyer_login %}
 <div class="header-wrapicon2">
 <img onclick="viewCartItem(1);" src="{{ url_for('static', filename='images/icons/icon-header-02.png') }}" class="header-icon1 js-show-header-dropdown" alt="ICON">
 <div id="mobile_header_cart" class="header-cart header-dropdown">
@@ -90,6 +95,7 @@
 </div>
 
 </div>
+       {% endif %}
     {% else %}
     <a href="{{ url_for('signin') }}">Login</a>
     {% endif %}
@@ -112,12 +118,14 @@
 <a href="{{ url_for('product') }}">Shop</a>
 </li>
 {% if user_login %}
+    {% if buyer_login %}
 <li class="item-menu-mobile">
 <a href="{{ url_for('cart') }}">Cart</a>
 </li>
 <li class="item-menu-mobile">
 <a href="{{ url_for('invoice') }}">Invoice</a>
 </li>
+        {% endif %}
 {% endif %}
 <li class="item-menu-mobile">
 <a href="{{ url_for('about') }}">About</a>
