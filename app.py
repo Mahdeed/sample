@@ -65,8 +65,7 @@ def signin():
             print(data)
             user = {'account': account, 'name': data[1], 'email': data[3], 'address': data[5], 'phone': data[4]}
             # user will have data extracted from db for the buyer or the seller
-            return redirect(url_for('profile', user=user["account"], username=user["name"], email=user["email"],
-                                   address=user["address"], phone=user["phone"], user_login=True))
+            return redirect(url_for('profile'))
         else:
             errorMsg = 'Invalid email/password!!'
             return render_template("sign_in_sign_up_slider_form.html", signin=True, title="Sign In", msg=errorMsg, user_login=False)
