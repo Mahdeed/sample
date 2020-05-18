@@ -193,8 +193,8 @@ def edit_product(id):
         if charges:
             charges = int(charges)
         email = session['email']
-        id = db.get_seller_id(email)
-        db.edit_product(name, price, warranty, type, charges, id)
+        seller_id = db.get_seller_id(email)
+        db.edit_product(name, price, warranty, type, charges, seller_id,id)
         return redirect(url_for('profile'))
 
 @app.route('/add_product',methods=["GET", "POST"])

@@ -197,13 +197,13 @@ def increase_product_quantity_in_cart(cartNo, productId):
         db.close()
 
 #Function to edit product from 'product' table
-def edit_product(name, price, warranty, type, deliveryCharges, seller):
+def edit_product(name, price, warranty, type, deliveryCharges, seller,id):
     try:
         db = sql.connect(DATABASEIP,DB_USER,DB_PASSWORD,DATABASE)
         cursor = db.cursor()
         print("DATABASE IS CONNECTED")
-        query = "UPDATE product SET name = %s, price = %s, warranty=%s, type=%s, deliveryCharges=%s where seller=%s"
-        args = (name, price, warranty, type, deliveryCharges, seller)
+        query = "UPDATE product SET name = %s, price = %s, warranty=%s, type=%s, deliveryCharges=%s where id=%s"
+        args = (name, price, warranty, type, deliveryCharges, id)
         cursor.execute(query, args)
         print("Record updated in the table 'product' ")
     except Exception as e:
