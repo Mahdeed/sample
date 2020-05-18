@@ -314,9 +314,9 @@ def product_detail(id):
     print(product_data)
     if product_data:
         if is_user_login():
-            return render_template("product-detail.html", user_login=True)
+            return render_template("product-detail.html",id = product_data[0]['id'], name=product_data[0]['name'],price=product_data[0]['price'], user_login=True)
         else:
-            return render_template("product-detail.html", user_login=False)
+            return render_template("product-detail.html", id = product_data[0]['id'], name=product_data[0]['name'],price=product_data[0]['price'], user_login=False)
     else:
         return redirect(url_for('pageNotFound'))
 
