@@ -25,36 +25,116 @@
 </div>
 </div>
 </div>
-<div style="text-align: center;margin-top: 250px;" class="w-size14 p-t-30 respon5">
-<h4 class="product-detail-name m-text16 p-b-13">
-{{ name }}
-</h4>
-<span class="m-text17">
-PKR {{ price }}
+<div class="w-size14 p-t-30 respon5">
+<h4 style="text-transform: uppercase;" class="product-detail-name m-text16 p-b-13">
+Name: {{ name }}
+    <br>
+    <br>
+<span style="text-align: center" class="m-text17">
+Price: PKR {{ price }}
 </span>
-
-
+</h4>
+<div class="p-b-45">
+<span class="s-text8">Categories: {{type}}</span>
+</div>
+<p class="s-text8 p-t-10">
+Nulla eget sem vitae eros pharetra viverra. Nam vitae luctus ligula. Mauris consequat ornare feugiat.
+</p>
+    {% if user_login %}{% if buyer_login %}
 <div class="p-t-33 p-b-60">
 <div class="flex-r-m flex-w p-t-10">
 <div class="w-size16 flex-m flex-w">
-    {% if user_login %}{% if buyer_login %}
-
 <div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
 <button onclick="add_to_cart({{ id }});" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
 Add to Cart
 </button>
 </div>
+</div>
+</div>
+</div>
     {% endif %}
+{% endif %}
+
+<div class="wrap-dropdown-content bo6 p-t-15 p-b-14 active-dropdown-content">
+<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+Description
+<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+</h5>
+<div class="dropdown-content dis-none p-t-15 p-b-23">
+<p class="s-text8">
+Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed velit. Proin gravida arcu nisl, a dignissim mauris placerat
+</p>
+</div>
+</div>
+<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
+<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+Additional information
+<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+</h5>
+<div class="dropdown-content dis-none p-t-15 p-b-23">
+<p class="s-text8">
+Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed velit. Proin gravida arcu nisl, a dignissim mauris placerat
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<section class="relateproduct bgwhite p-t-45 p-b-138">
+<div class="container">
+<div class="sec-title p-b-60">
+<h3 class="m-text5 t-center">
+Related Products
+</h3>
+</div>
+
+<div class="wrap-slick2">
+<div class="slick2">
+{% if products %}
+    {% for product in products %}
+        <div class="item-slick2 p-l-15 p-r-15">
+            <!-- Block2 -->
+            <div class="block2">
+                <div class="block2-img wrap-pic-w of-hidden pos-relative">
+                    <img src="{{ url_for('static', filename='images/item-'+product['id']+'.jpg') }}" alt="IMG-PRODUCT">
+                    <div class="block2-overlay trans-0-4">
+                        {% if user_login %}
+                            {% if buyer_login %}
+                        <a onclick="add_to_wishlist({{ product['id'] }},this);" class="block2-btn-addwishlist hov-pointer trans-0-4">
+                            <i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
+                            <i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
+                        </a>
+                        <div class="block2-btn-addcart w-size1 trans-0-4">
+                            <!-- Button -->
+                            <button onclick="add_to_cart({{ product['id'] }});" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
+                                Add to Cart
+                            </button>
+                        </div>
+                                {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="block2-txt p-t-20">
+                    <a href="{{ url_for('product_detail',id=product['id']) }}" class="block2-name dis-block s-text3 p-b-5">
+                        {{product['name']}}
+                    </a>
+
+                    <span class="block2-price m-text6 p-r-5">
+                        {{product['price']}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endif %}
 </div>
 </div>
 </div>
-
-
-
-</div>
-</div>
-</div>
+</section>
 
 
 {% endblock %}
